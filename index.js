@@ -1,20 +1,18 @@
 //*************************************** BOT FEITO POR PERPETVA ⚡ ********************************************//
 
 
-const { isCapturablePokemon, getPokemonName, getPokedex, saveCapturedPokemon, checkIfPokemonCaptured, getRandomPokemonId } = require('./modulos/poke_functions.js')
-const server_poke = require('./modulos/server.js')
-const fs = require('fs')
-const qrcode = require('qrcode-terminal')
-var mime = require('mime-types')
+const { isCapturablePokemon, getPokemonName, getPokedex, saveCapturedPokemon, checkIfPokemonCaptured, getRandomPokemonId } = require('./modulos/poke_functions.js');
+const server_poke = require('./modulos/server.js');
+const fs = require('fs');
+const qrcode = require('qrcode-terminal');
+var mime = require('mime-types');
 const axios = require('axios');
 const moment = require('moment-timezone');
-// const ytdl = require('ytdl-core'); FUNÇÃO BAIXAR 
-// const ffmpeg = require('fluent-ffmpeg'); FUNÇÃO BAIXAR 
+const ytdl = require('ytdl-core'); 
+const ffmpeg = require('fluent-ffmpeg');  
 const express = require('express');
 //-----------------------------------------------------------------------------------------------------
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
-
-// FUNÇÃO BAIXAR(MUSICA) DESABILITADA, PARA HABILITAR DESCOMENTE(L:186) E INSTALE O YTDL E FFMPEG
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -52,9 +50,9 @@ client.on('message', async msg => {
 
   if (command === '!menu') {
     msg.react('🇧🇷')
-    msg.reply('Oi muito prazer! 😎 Eu sou a Dolores! \nAbaixo comandos para ajuda 😇\n\n--------------------\n!figurinha\n!grupoinfo\n!mencione\n!clima\n!gato\n!caraoucoroa\n!horario\n!todos\n!cotacao\n!poke (ID ou nome)\n!noticias');
+    msg.reply('Oi muito prazer! 😎 Eu sou a Dolores! \nAbaixo comandos para ajuda 😇\n\n--------------------\n!figurinha\n!grupoinfo\n!mencione\n!clima\n!gato\n!caraoucoroa\n!horario\nbaixar (link YouTube)\n!todos\n!cotacao\n!poke (ID ou nome)\n!noticias');
 
-    // \n!baixar (link YouTube), \n!todos => funções quebradas.
+    // \n!todos => função quebrada.
 
   } else if (command === '!grupoinfo') {
     let chat = await msg.getChat();
@@ -187,45 +185,52 @@ client.on('message', async msg => {
     const horarios1 = obterHorarios();
     msg.reply(horarios1)
 
-  // } else if (command.startsWith('!baixar ')) {
-  //   const youtubeUrl = msg.body.split(' ')[1];
-  //   const baixarEConverterParaMP3 = (url) => {
-  //     const videoStream = ytdl(url, { filter: 'audioonly' });
+  } else if (command.startsWith('!baixar ')) {
+    const youtubeUrl = msg.body.split(' ')[1];
 
-  //     const caminhoArquivo = ('./downloaded-audio/audio.mp3')
+    if (youtubeUrl.startsWith('https://www.youtube.com')) {
+       
+    const baixarEConverterParaMP3 = (url) => {
+      const videoStream = ytdl(url, { filter: 'audioonly' });
 
-  //     ffmpeg()
-  //       .input(videoStream)
-  //       .audioCodec('libmp3lame')
-  //       .audioBitrate(320)
-  //       .toFormat('mp3')
-  //       .on('end', () => {
-  //         console.log('Conversão concluída com sucesso!');
-  //       })
-  //       .on('error', (err) => {
-  //         console.error('Erro durante a conversão:', err);
-  //       })
-  //       .pipe(fs.createWriteStream(caminhoArquivo)); // Salvar o arquivo MP3
-  //   };
+      const caminhoArquivo = ('./downloaded-audio/audio.mp3')
 
-  //   baixarEConverterParaMP3(youtubeUrl);
-  //   msg.reply('..._Estou baixando sua música_...')
+      ffmpeg()
+        .input(videoStream)
+        .audioCodec('libmp3lame')
+        .audioBitrate(320)
+        .toFormat('mp3')
+        .on('end', () => {
+          console.log('Conversão concluída com sucesso!');
+        })
+        .on('error', (err) => {
+          console.error('Erro durante a conversão:', err);
+        })
+        .pipe(fs.createWriteStream(caminhoArquivo)); // Salvar o arquivo MP3
+    };
 
-  //   function envia() {
-  //     const caminhoArquivo = './downloaded-audio/audio.mp3';
-  //     if (fs.existsSync(caminhoArquivo)) {
-  //       const enviaAudio = MessageMedia.fromFilePath('./downloaded-audio/audio.mp3');
+    baixarEConverterParaMP3(youtubeUrl);
+    msg.reply('..._Estou baixando sua música_...')
 
-  //       client.sendMessage(msg.from, enviaAudio);
+    setTimeout(envia, 10000)
+    
+    function envia() {
+      const caminhoArquivo = './downloaded-audio/audio.mp3';
+      if (fs.existsSync(caminhoArquivo)) {
+        const enviaAudio = MessageMedia.fromFilePath('./downloaded-audio/audio.mp3');
 
-  //       fs.unlinkSync(caminhoArquivo);
-  //       console.log('Arquivo excluído com sucesso.');
-  //     } else {
-  //       console.log('O arquivo não existe.');
-  //     }
-  //   }
+        client.sendMessage(msg.from, enviaAudio);
 
-  //   setTimeout(envia, 10000)
+        fs.unlinkSync(caminhoArquivo);
+        console.log('Arquivo excluído com sucesso.');
+      } else {
+        console.log('O arquivo não existe.');
+      }
+    }
+
+  } else {
+    msg.reply('Insira um link do YouTube, por favor ')
+  }
 
 // ---
 // ---
@@ -426,5 +431,3 @@ client.on('message', async msg => {
 });
 
 client.initialize();
-
-//API DAS PASSAGENS AEREAS
