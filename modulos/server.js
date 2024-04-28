@@ -1,23 +1,21 @@
 const express = require('express');
 const axios = require('axios');
 
-///////// INICIO DO SERVIDOR PRA PUXAR O HTTPS //////////
-
 const app = express();
 const port = 3000;
 
-app.get('/pokemon/:name', async (req, res) => {
+app.get('/pokemon/:name', async (requerimento, retorno) => {
   try {
-    const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${req.params.name}`);
+    const resposta = await axios.get(`https://pokeapi.co/api/v2/pokemon/${requerimento.params.name}`);
     const pokemonData = {
-      name: response.data.name,
-      id: response.data.id,
-      types: response.data.types.map(type => type.type.name)
+      name: resposta.data.name,
+      id: resposta.data.id,
+      types: resposta.data.types.map(type => type.type.name)
     };
-    res.json(pokemonData);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Erro ao obter dados do Pokémon.' });
+    retorno.json(pokemonData);
+  } catch (erro) {
+    console.error(erro);
+    retorno.status(500).json({ erro: 'Erro ao obter dados do Pokémon.' });
   }
 });
 
@@ -25,4 +23,3 @@ app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);
 });
 
-///////// FIM DO SERVIDOR PRA PUXAR O HTTPS //////////
