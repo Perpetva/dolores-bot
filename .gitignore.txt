@@ -1,0 +1,7 @@
+# Whatsapp-web.js #
+.wwebjs_auth/
+
+# Arquivos gerados #
+node_modules/
+.wwebjs_cache/
+package-lock.json
