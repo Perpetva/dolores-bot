@@ -7,20 +7,21 @@ const mensagemMenu = require('./modulos/menu.js');
 const linksGato = require('./modulos/gato.js');
 const linksCachorro = require('./modulos/cachorro.js');
 const linksMoedas = require('./modulos/moedas.js');
-const CHAVE_NEWSAPI = require('./modulos/chaves_api.js');
 
-const { numeroAleatorio } = require('./modulos/funcoes.js');
+const { numeroAleatorio, chamaTodos } = require('./modulos/funcoes.js');
 const { obterHorarios } = require('./modulos/horarios.js');
 const { chamaFilme } = require('./modulos/filmes.js');
 const { cotacao } = require('./modulos/cotacao.js');
 const { receitaAleatoria } = require('./modulos/receitas.js');
+const { chamaClima } = require('./modulos/clima.js');
+const { chamaNoticias } = require('./modulos/noticias.js');
+const { enviaFigurinha } = require('./modulos/figurinha.js');
 
 const qrcode = require('qrcode-terminal');
 const express = require('express');
 const { MongoStore } = require('wwebjs-mongo');
 const mongoose = require('mongoose');
 const fs = require('fs');
-const mime = require('mime-types');
 const axios = require('axios');
 const ytdl = require('ytdl-core');
 const ffmpeg = require('fluent-ffmpeg');
@@ -59,8 +60,6 @@ mongoose.connect(MONGODB_URI).then(() => {
 let ultimoPokemonSpawnado = '';
 let contadorMensagens = 0;
 let capturaAbilitada = true;
-
-const CHAVE_OPENWEATHER = 'SUA CHAVE API OPENWEATHER AQUI';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -131,78 +130,11 @@ client.on('message', async msg => {
   }
 
   else if (msg.hasMedia && comando === '!figurinha') {
-    try {
-      msg.downloadMedia().then(arquivo => {
-          if (arquivo) {
-              const caminhoArquivo = './downloaded-media/';
-  
-              if (!fs.existsSync(caminhoArquivo)) {
-                  fs.mkdirSync(caminhoArquivo)
-              }
-  
-              const extensao = mime.extension(arquivo.mimetype)
-              const nomeArquivo = new Date().getTime();
-              const nomeInteiroArquivo = `${caminhoArquivo}${nomeArquivo}.${extensao}`;
-  
-              // Salvar o arquivo
-              try {
-                  fs.writeFileSync(nomeInteiroArquivo, arquivo.data, { encoding: 'base64' });
-                  console.log('Arquivo baixado com sucesso', nomeInteiroArquivo);
-  
-                  const enviarSticker = (filePath) => {
-                      MessageMedia.fromFilePath(filePath);
-                      client.sendMessage(msg.from, new MessageMedia(arquivo.mimetype, fs.readFileSync(filePath).toString('base64'), nomeArquivo), { sendMediaAsSticker: true, stickerAuthor: "Criado por Dolores", stickerName: "Bot de Perpetva ⚡" });
-                      fs.unlinkSync(filePath);
-                      console.log("Arquivo excluído com sucesso");
-                  };
-  
-                  if (arquivo.mimetype.startsWith('video')) {
-                      const caminhoConvertido = `${caminhoArquivo}${nomeArquivo}.mp4`;
-                      ffmpeg(nomeInteiroArquivo).output(caminhoConvertido).on('end', () => {
-                              console.log('Vídeo convertido com sucesso');
-                              fs.unlinkSync(nomeInteiroArquivo); // Remove o arquivo original após a conversão
-                              enviarSticker(caminhoConvertido);
-                          }).on('error', (erro) => {
-                              console.log('Erro na conversão do vídeo', erro);
-                              msg.reply('Erro ao converter o vídeo. Tente novamente.');
-                          }).run();
-                  } else {
-                      enviarSticker(nomeInteiroArquivo);
-                  }
-              } catch (erro) {
-                  console.log('Falha ao salvar o arquivo', erro);
-              }
-          }
-      })
-  } catch (erro) {
-      console.log('Erro ao transformar a figurinha.', erro);
-      msg.reply('Erro ao transformar a figurinha, tente mandar em outro formato');
-  }
+    enviaFigurinha(msg, client);
   }
 
   else if (comando === '!clima') {
-    const cidade = "Sao Paulo";
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&lang=pt_br&units=metric&appid=${CHAVE_OPENWEATHER}`;
-
-    axios.get(apiUrl)
-      .then(resposta => {
-        const climaAtual = resposta.data.weather[0].description;
-        const temperaturaAtual = resposta.data.main.temp;
-
-        if (temperaturaAtual >= 20) {
-          msg.reply(`Clima atual em ${cidade}: ${climaAtual}. Temperatura: ${temperaturaAtual}°C! 😎`);
-          msg.react('🥵')
-
-        } else {
-          msg.reply(`Clima atual em ${cidade}: ${climaAtual}. Temperatura: ${temperaturaAtual}°C! 🥶`);
-          msg.react('🥶')
-        }
-      })
-
-      .catch(erro => {
-        console.error("Erro ao obter informações de clima:", erro);
-        msg.reply(`Não foi possivel mandar o clima.`);
-      });
+    chamaClima(msg);
   }
 
   else if (comando === '!horario') {
@@ -258,22 +190,7 @@ client.on('message', async msg => {
   }
 
   else if (comando === '!todos') {
-    if (chat.isGroup) {
-      let text = '';
-      let mentions = [];
-
-      for (let participant of chat.participants) {
-          mentions.push(`${participant.id.user}@c.us`);
-          text += `@${participant.id.user} \n `;
-      }
-
-      await chat.sendMessage('*--Marcando todos--*\n' + text, { mentions });
-
-  } else {
-      msg.reply("Esse comando só funciona em grupos.")
-  }
-
-    await chat.sendMessage(text, { mentions });
+    chamaTodos (msg, chat);
   }
 
   else if (comando === '!cotacao') {
@@ -379,29 +296,15 @@ client.on('message', async msg => {
   }
 
   else if (comando === '!noticias') {
-    try {
-      const retorno = await axios.get(CHAVE_NEWSAPI);
-      const artigos = retorno.data.articles;
-
-      if (artigos.length >= 0) {
-        const topNews = await artigos.map((artigo) => `*${artigo.title}*\n${artigo.url}`).join('\n\n');
-        await chat.sendMessage(`📰 Últimas notícias:\n${topNews}`);
-      } else {
-        await chat.sendMessage('Desculpe, não foi possível recuperar as notícias no momento.');
-      }
-    } catch (erro) {
-      console.error('Erro ao obter notícias:', erro);
-      await chat.sendMessage('Desculpe, ocorreu um erro ao recuperar as notícias.');
-    }
+    chamaNoticias(msg);
   }
 
   else if (comando === '!cartaz') {
-    msg.reply(await chamaFilme())
+    msg.reply(await chamaFilme());
   }
 
   else if(comando === '!receita') {
-    const media = await receitaAleatoria();
-    msg.reply(media)
+    msg.reply(await receitaAleatoria());
   }
 
   else {

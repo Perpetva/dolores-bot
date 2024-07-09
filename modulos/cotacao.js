@@ -1,5 +1,5 @@
 const axios = require('axios');
-const CHAVE_EXCHANGERATE = require('./chaves_api.js');
+const CHAVE_EXCHANGERATE = 'SUA CHAVE ENCHANGERATE AQUI';
 
 async function cotacao () {
     try {

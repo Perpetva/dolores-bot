@@ -1,5 +1,5 @@
 const axios = require('axios');
-const CHAVE_TMDB = require('./chaves_api.js');
+const CHAVE_TMDB = 'SUA CHAVE TMDB AQUI';
 
 async function chamaFilme () {
     const baseUrl = 'https://api.themoviedb.org/3';
