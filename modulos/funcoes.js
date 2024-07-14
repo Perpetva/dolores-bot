@@ -1,5 +1,5 @@
-function numeroAleatorio(a, b) {
-    return Math.floor(Math.random() * (b - a + 1)) + a;
+function numeroAleatorio(quantidade, numero) {
+    return Math.floor(Math.random() * quantidade) + numero;
 }
 
 async function chamaTodos (msg, chat) {
@@ -15,7 +15,7 @@ async function chamaTodos (msg, chat) {
         await chat.sendMessage('*--Marcando todos--*\n' + text, { mentions });
 
     } else {
-        msg.reply("Esse comando só funciona em grupos.")
+        msg.reply("Esse comando só funciona em grupos.");
     }
 }
 

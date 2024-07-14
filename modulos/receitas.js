@@ -1,4 +1,4 @@
-const { randomNumber } = require('./funcoes.js')
+const { numeroAleatorio } = require('./funcoes.js')
 
 const receitas = [
     "Sopa de Legumes:\nIngredientes:\n- 2 batatas\n- 2 cenouras\n- 1 abobrinha\n- 1 litro de caldo de legumes\n- Sal e pimenta a gosto\n\nModo de Preparo:\n1. Corte todos os legumes em cubos.\n2. Em uma panela, adicione o caldo de legumes e os legumes cortados.\n3. Cozinhe até que os legumes estejam macios.\n4. Tempere com sal e pimenta.\n5. Sirva quente.",
@@ -23,9 +23,8 @@ const receitas = [
 ];
 
 async function receitaAleatoria (){
-    const index = randomNumber(0, receitas.length - 1);
+    const index = numeroAleatorio(receitas.length, 0);
     return receitas[index];
 };
 
 module.exports = { receitaAleatoria }
-  
