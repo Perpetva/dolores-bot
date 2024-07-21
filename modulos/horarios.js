@@ -1,6 +1,6 @@
 const moment = require('moment-timezone');
 
-function obterHorarios() {
+function obterHorarios(msg) {
 
     const lugares = [
         { nome: 'Nova York', fuso: 'America/New_York' },
@@ -19,8 +19,9 @@ function obterHorarios() {
         const horaAtual = moment().tz(lugar.fuso).format('HH:mm');
         return `${lugar.nome}: ${horaAtual}`;
     });
+    const envia = `Horario atual em varios lugares do mundo! 🕑\n\n${horarios.join('\n')}`
 
-    return horarios.join('\n');
+    msg.reply(envia)
 }
 
 module.exports = { obterHorarios }

@@ -22,9 +22,10 @@ const receitas = [
     "Creme de Abóbora:\nIngredientes:\n- 500g de abóbora\n- 1 cebola\n- 2 dentes de alho\n- 1 litro de caldo de legumes\n- Sal e pimenta a gosto\n- Creme de leite para servir\n\nModo de Preparo:\n1. Cozinhe a abóbora, a cebola e o alho no caldo de legumes até que a abóbora esteja macia.\n2. Bata tudo no liquidificador até formar um creme.\n3. Tempere com sal e pimenta.\n4. Sirva com um pouco de creme de leite por cima."
 ];
 
-async function receitaAleatoria (){
-    const index = numeroAleatorio(receitas.length, 0);
-    return receitas[index];
+async function receitaAleatoria (msg){
+    const i = numeroAleatorio(receitas.length, 0);
+    const envia = `Olha só uma receita bem gostosa! 😋\n${receitas[i]}`
+    msg.reply(envia)
 };
 
 module.exports = { receitaAleatoria }

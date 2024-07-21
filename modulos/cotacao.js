@@ -1,7 +1,7 @@
 const axios = require('axios');
 const CHAVE_EXCHANGERATE = 'SUA CHAVE ENCHANGERATE AQUI';
 
-async function cotacao () {
+async function cotacao (msg) {
     try {
         const retornoDolar = await axios.get(`https://open.er-api.com/v6/latest/USD`, {
             headers: {
@@ -33,9 +33,9 @@ async function cotacao () {
         const iene = retornoIene.data.rates.BRL.toFixed(2);
         const bitcoin = retornoBitcoin.data.bitcoin.usd;
 
-        const mensagemResposta = `Um dolár custa hoje R$${dolar} reais\nUm euro custa hoje R$${euro} reais\nUm iene custa hoje R$${iene} reais\nUm bitcoin custa hoje U$${bitcoin} doláres`;
+        const envia = `Cotação atual de algumas moedas! 🪙\n\nUm dolár custa hoje R$${dolar} reais\nUm euro custa hoje R$${euro} reais\nUm iene custa hoje R$${iene} reais\nUm bitcoin custa hoje U$${bitcoin} doláres`;
 
-        return mensagemResposta
+        msg.reply(envia)
 
     } catch (error) {
         console.error('Erro:', error.message);

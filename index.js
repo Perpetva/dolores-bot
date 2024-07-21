@@ -41,9 +41,36 @@ mongoose.connect(MONGODB_URI).then(() => {
   const store = new MongoStore({ mongoose: mongoose });
   const client = new Client({
       puppeteer: {
-          headless: true,
-          args: ['--no-sandbox'],
-      },
+        headless: true,
+        args:
+        ['--no-sandbox',
+            "--disable-setuid-sandbox",
+            "--log-level=3",
+            "--no-default-browser-check",
+            "--disable-site-isolation-trials",
+            "--no-experiments",
+            "--ignore-gpu-blacklist",
+            "--ignore-certificate-errors",
+            "--ignore-certificate-errors-spki-list",
+            "--enable-gpu",
+            "--disable-default-apps",
+            "--enable-features=NetworkService",
+            "--disable-webgl",
+            "--disable-threaded-animation",
+            "--disable-threaded-scrolling",
+            "--disable-in-process-stack-traces",
+            "--disable-histogram-customizer",
+            "--disable-gl-extensions",
+            "--disable-composited-antialiasing",
+            "--disable-canvas-aa",
+            "--disable-3d-apis",
+            "--disable-accelerated-2d-canvas",
+            "--disable-accelerated-jpeg-decoding",
+            "--disable-accelerated-mjpeg-decode",
+            "--disable-app-list-dismiss-on-blur",
+            "--disable-accelerated-video-decode"
+        ],
+    },
       authStrategy: new RemoteAuth({
           store: store,
           backupSyncIntervalMs: 300000,
@@ -111,15 +138,15 @@ client.on('message', async msg => {
   }
 
   else if (comando === '!horario') {
-    msg.reply(obterHorarios())
+    obterHorarios(msg);
   }
 
   else if (comando === '!todos') {
-    chamaTodos (msg, chat);
+    chamaTodos(msg, chat);
   }
 
   else if (comando === '!cotacao') {
-    msg.reply(await cotacao());
+    cotacao(msg);
   }
 
   else if (comando.startsWith('!poke ')) {
@@ -144,15 +171,15 @@ client.on('message', async msg => {
   }
 
   else if (comando === '!noticias') {
-    chamaNoticias(msg);
+    chamaNoticias(msg, client);
   }
 
   else if (comando === '!cartaz') {
-    msg.reply(await chamaFilme());
+    chamaFilme(msg);
   }
 
   else if(comando === '!receita') {
-    msg.reply(await receitaAleatoria());
+    receitaAleatoria(msg);
   }
 
   else if (comando.includes('boa noite')) {

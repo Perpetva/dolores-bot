@@ -16,7 +16,7 @@ async function chamaPokemon (msg, client) {
 
             try {
                 const imagemPokemonUrl = await MessageMedia.fromUrl(`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${dadosPokemon.id}.png`)
-                const mensagem = `Nome: ${dadosPokemon.name}\nID: ${dadosPokemon.id}\nTipo(s): ${dadosPokemon.types.join(', ')}`
+                const mensagem = `Nome: ${dadosPokemon.name}\nID: ${dadosPokemon.id}\nTipo(s): ${dadosPokemon.types.join(', ')}\nGeração: ${verificaAGeracao(dadosPokemon.id)}.`
 
                 client.sendMessage(msg.from, mensagem);
                 client.sendMessage(msg.from, imagemPokemonUrl, { sendMediaAsSticker: true });
@@ -56,16 +56,14 @@ async function enviaPokedex (msg, chat) {
 
 async function spawnaPokemon (client, chat) {
     capturaAbilitada = true;
-    const meuTelefone = 'SEU TELEFONE'
+    const meuTelefone = 'SEU NÚMERO AQUI'
 
     const idPokemonAleatorio = numeroAleatorio(1025, 1);
     const imagemUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${idPokemonAleatorio}.png`;
-
     const imagemUrlPassada = await MessageMedia.fromUrl(imagemUrl);
 
     try {
         await chat.sendMessage(imagemUrlPassada, { sendMediaAsSticker: true, stickerAuthor: "Criado por Dolores", stickerName: "Bot de Perpetva ⚡" });
-        await chat.sendMessage('_Um pokemon foi apareceu!!! Para pegar digite "!pegar <nome do pokemon>"_');
 
         ultimoPokemonSpawnado = await getNomePokemon(idPokemonAleatorio);
         client.sendMessage(`${meuTelefone}@c.us`, ultimoPokemonSpawnado);
@@ -110,10 +108,28 @@ async function pegaPokemon (msg, chat, comando) {
 }
 
 function checaSeAbilitado () {
-    if (capturaAbilitada) {
-        return true
-    } else {
-        return false
+    return capturaAbilitada
+}
+
+function verificaAGeracao (id) {
+    if (id <= 151) {
+        return  'I'
+    } else if (id >= 152 && id <= 251) {
+        return  'II'
+    } else if (id >= 252 && id <= 386) {
+        return  'III'
+    } else if (id >= 387 && id <= 494) {
+        return  'IV'
+    } else if (id >= 495 && id <= 649) {
+        return  'V'
+    } else if (id >= 650 && id <= 721) {
+        return  'VI'
+    } else if (id >= 722 && id <= 809) {
+        return  'VII'
+    } else if (id >= 810 && id <= 905) {
+        return  'VIII'
+    } else if (id >= 906) {
+        return  'IX'
     }
 }
 

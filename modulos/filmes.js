@@ -1,7 +1,7 @@
 const axios = require('axios');
 const CHAVE_TMDB = 'SUA CHAVE TMDB AQUI';
 
-async function chamaFilme () {
+async function chamaFilme (msg) {
     const baseUrl = 'https://api.themoviedb.org/3';
     let enviarFilmes = '';
     try {
@@ -18,12 +18,14 @@ async function chamaFilme () {
         const mensagem = `Filme: *${filme.title}*\nData de lançamento: ${filme.release_date}\n--------\n`
         enviarFilmes += mensagem; 
         });
-        return enviarFilmes
+        const envia = `Filmes em cartaz no cinema! 🍿\n\n${enviarFilmes}`;
+        
+        msg.reply(envia);
 
     } catch (erro) {
-        console.error('Erro ao buscar filmes em cartaz:', erro);
-        return 'Erro ao buscar filmes em cartaz'
+        console.log('Erro ao buscar filmes em cartaz:', erro);
+        msg.reply('Erro ao buscar filmes em cartaz') 
     }
 }
 
-module.exports = { chamaFilme };
+module.exports = { chamaFilme };;
