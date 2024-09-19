@@ -1,5 +1,7 @@
 const axios = require('axios');
-const CHAVE_TMDB = 'SUA CHAVE TMDB AQUI';
+require('dotenv').config();
+
+const chaveTheMovie = process.env.CHAVE_TMDB;
 
 async function chamaFilme (msg) {
     const baseUrl = 'https://api.themoviedb.org/3';
@@ -7,7 +9,7 @@ async function chamaFilme (msg) {
     try {
         const response = await axios.get(`${baseUrl}/movie/now_playing`, {
             params: {
-                api_key: CHAVE_TMDB,
+                api_key: chaveTheMovie,
                 language: 'pt-BR',
                 region: 'BR' 
             }
@@ -28,4 +30,4 @@ async function chamaFilme (msg) {
     }
 }
 
-module.exports = { chamaFilme };;
+module.exports = { chamaFilme };

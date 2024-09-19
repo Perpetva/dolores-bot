@@ -4,18 +4,18 @@ const axios = require('axios');
 const app = express();
 const port = 3000;
 
-app.get('/pokemon/:name', async (requerimento, retorno) => {
+app.get('/pokemon/:name', async (req, res) => {
   try {
-    const resposta = await axios.get(`https://pokeapi.co/api/v2/pokemon/${requerimento.params.name}`);
+    const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${req.params.name}`);
     const pokemonData = {
-      name: resposta.data.name,
-      id: resposta.data.id,
-      types: resposta.data.types.map(type => type.type.name)
+      name: response.data.name,
+      id: response.data.id,
+      types: response.data.types.map(type => type.type.name)
     };
-    retorno.json(pokemonData);
-  } catch (erro) {
-    console.error(erro);
-    retorno.status(500).json({ erro: 'Erro ao obter dados do Pokémon.' });
+    res.json(pokemonData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao obter dados do Pokémon.' });
   }
 });
 

@@ -1,5 +1,5 @@
 const { MessageMedia } = require('whatsapp-web.js');
-const { numeroAleatorio } = require('./funcoes')
+const { numeroAleatorio } = require('./funcoes');
 
 const linksMoedas = ['https://sorteador.com.br/assets/images/utils/flip-a-coin/head.png', 'https://sorteador.com.br/assets/images/utils/flip-a-coin/tail.png'];
 
@@ -11,8 +11,8 @@ async function chamaMoeda (msg, chat, client) {
 
         const atraso = 3000
         setTimeout(() => {
-        client.sendMessage(msg.from, media, { sendMediaAsSticker: true });
-        chat.clearState();
+            client.sendMessage(msg.from, media, { sendMediaAsSticker: true });
+            chat.clearState();
         }, atraso);
 
     } catch (erro) {

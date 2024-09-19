@@ -1,73 +1,77 @@
 const axios = require('axios');
 const { Client } = require('pg');
+require('dotenv').config();
 
 // //////////// BANCO DE DADOS LOCAL ////////////////////////
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('pokemon.db'); // Cria o banco de dados SQLite
+// const sqlite3 = require('sqlite3').verbose();
+// const axios = require('axios');
+// const db = new sqlite3.Database('pokemon.db'); // Cria o banco de dados SQLite
 
-// Cria a tabela de Pokémon se ainda não existir
-db.run('CREATE TABLE IF NOT EXISTS pokemon (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id TEXT, group_id TEXT, name TEXT)');
+// // Cria a tabela de Pokémon se ainda não existir
+// db.run('CREATE TABLE IF NOT EXISTS pokemon (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id TEXT, group_id TEXT, name TEXT)');
 
-function checaSePokemonCapturado(userId, groupId, nomePokemon) {
-    return new Promise((retorno) => {
-        db.get('SELECT * FROM pokemon WHERE user_id = ? AND group_id = ? AND name = ?', [userId, groupId, nomePokemon], (erro, linha) => {
-            if (erro) {
-                console.error('Erro ao verificar captura do Pokémon:', err.message);
-                retorno(false);
-            } else {
-                retorno(!!linha);
-            }
-        });
-    });
-}
+// function checaSePokemonCapturado(userId, groupId, nomePokemon) {
+//     return new Promise((retorno) => {
+//         db.get('SELECT * FROM pokemon WHERE user_id = ? AND group_id = ? AND name = ?', [userId, groupId, nomePokemon], (erro, linha) => {
+//             if (erro) {
+//                 console.error('Erro ao verificar captura do Pokémon:', err.message);
+//                 retorno(false);
+//             } else {
+//                 retorno(!!linha);
+//             }
+//         });
+//     });
+// }
 
-function salvaPokemonCapturado(userId, groupId, nomePokemon) {
-    db.run('INSERT INTO pokemon (user_id, group_id, name) VALUES (?, ?, ?)', [userId, groupId, nomePokemon], (erro) => {
-        if (erro) {
-            console.error('Erro ao salvar Pokémon capturado:', err.message);
-        } else {
-            console.log(`Pokémon capturado salvo: ${nomePokemon}`);
-        }
-    });
-}
+// function salvaPokemonCapturado(userId, groupId, nomePokemon) {
+//     db.run('INSERT INTO pokemon (user_id, group_id, name) VALUES (?, ?, ?)', [userId, groupId, nomePokemon], (erro) => {
+//         if (erro) {
+//             console.error('Erro ao salvar Pokémon capturado:', err.message);
+//         } else {
+//             console.log(`Pokémon capturado salvo: ${nomePokemon}`);
+//         }
+//     });
+// }
 
-function getPokedex(userId, groupId) {
-    return new Promise((resolve) => {
-        db.all('SELECT name FROM pokemon WHERE user_id = ? AND group_id = ?', [userId, groupId], (erro, linhas) => {
-            if (erro) {
-                console.error('Erro ao obter Pokedex:', erro.message);
-                resolve([]);
-            } else {
-                const pokedex = linhas.map((linhas) => linhas.name);
-                resolve(pokedex);
-            }
-        });
-    });
-}
+// function getPokedex(userId, groupId) {
+//     return new Promise((resolve) => {
+//         db.all('SELECT name FROM pokemon WHERE user_id = ? AND group_id = ?', [userId, groupId], (erro, linhas) => {
+//             if (erro) {
+//                 console.error('Erro ao obter Pokedex:', erro.message);
+//                 resolve([]);
+//             } else {
+//                 const pokedex = linhas.map((linhas) => linhas.name);
+//                 resolve(pokedex);
+//             }
+//         });
+//     });
+// }
 
-async function getNomePokemon(pokemonId) {
-    try {
-        const resposta = await axios.get(`http://localhost:3000/pokemon/${pokemonId}`);
-        return resposta.data.name;
-    } catch (erro) {
-        console.error('Erro ao obter o nome do Pokémon:', erro);
-        return '';
-    }
-}
+// async function getNomePokemon(pokemonId) {
+//     try {
+//         const resposta = await axios.get(`http://localhost:3000/pokemon/${pokemonId}`);
+//         return resposta.data.name;
+//     } catch (erro) {
+//         console.error('Erro ao obter o nome do Pokémon:', erro);
+//         return '';
+//     }
+// }
 
 //------------------------------------------------------------
 //////////////// BANCO DE DADOS EXTERNO //////////////////////
 
+const postgresqlDatabase = process.env.DATABASE_URL_POSTGRESQL
+
+
 const client = new Client({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: postgresqlDatabase,
   ssl: {
-    rejectUnauthorized: false // Apenas para permitir conexões não seguras para este exemplo. Em produção, use SSL seguro.
+    rejectUnauthorized: false 
   }
 });
 
 client.connect();
 
-// Cria a tabela de Pokémon se ainda não existir
 client.query(`
   CREATE TABLE IF NOT EXISTS pokemon (
     id SERIAL PRIMARY KEY,

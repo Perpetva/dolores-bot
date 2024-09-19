@@ -1,23 +1,25 @@
 const axios = require('axios');
-const CHAVE_EXCHANGERATE = 'SUA CHAVE ENCHANGERATE AQUI';
+require('dotenv').config();
+
+const chaveExchangerate = process.env.CHAVE_EXCHANGERATE;
 
 async function cotacao (msg) {
     try {
         const retornoDolar = await axios.get(`https://open.er-api.com/v6/latest/USD`, {
             headers: {
-                'apikey': CHAVE_EXCHANGERATE,
+                'apikey': chaveExchangerate,
             },
         });
 
         const retornoEuro = await axios.get(`https://open.er-api.com/v6/latest/EUR`, {
             headers: {
-                'apikey': CHAVE_EXCHANGERATE,
+                'apikey': chaveExchangerate,
             },
         });
 
         const retornoIene = await axios.get(`https://open.er-api.com/v6/latest/JPY`, {
             headers: {
-                'apikey': CHAVE_EXCHANGERATE,
+                'apikey': chaveExchangerate,
             },
         });
 

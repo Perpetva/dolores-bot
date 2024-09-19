@@ -1,0 +1,15 @@
+# arquivos de dependências
+node_modules/
+package-lock.json
+
+# caches do wweb.js
+.wwebjs_cache/
+
+# arquivos de autenticação
+.wwebjs_auth/
+
+# arquivos de keys
+.env
+
+# pasta de midias
+downloaded-media/
