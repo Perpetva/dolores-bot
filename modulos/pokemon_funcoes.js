@@ -11,6 +11,12 @@ let grupoSelecionado = '';
 const cooldowns = {};
 
 async function chamaPokemon(msg, client) {
+    const ipoke = msg.body.split(' ')[0];
+    if (ipoke != '!poke'.toLowerCase()){
+        msg.reply('Você quis dizer !poke?');
+        return;
+    }
+
     const nomePokemon = msg.body.split(' ')[1];
     let dadosPokemon
 
@@ -103,7 +109,7 @@ async function pegaPokemon(msg, chat, comando) {
         const idUsuario = contato.id._serialized;
 
         const agora = Date.now();
-        const cooldownTempo = 60000; 
+        const cooldownTempo = 60000;
 
         if (cooldowns[idUsuario] && agora - cooldowns[idUsuario] < cooldownTempo) {
             const tempoRestante = Math.ceil((cooldownTempo - (agora - cooldowns[idUsuario])) / 1000);
@@ -320,7 +326,7 @@ async function getInsignia(msg, chat, client) {
         const tiposContagem = {};
 
         for (const pokemon of usuarioPokedex) {
-            const tipos = await getTiposPokemon(pokemon); 
+            const tipos = await getTiposPokemon(pokemon);
 
             for (const tipo of tipos) {
                 if (tiposContagem[tipo]) {
@@ -341,12 +347,18 @@ async function getInsignia(msg, chat, client) {
             }
         }
 
+        const insigniaUrl = checaInsignia(tipoDominante);
+        if (!insigniaUrl) {
+            await msg.reply('Você não tem insígnia.');
+            return;
+        }
+
         if (tipoDominante) {
             await msg.reply(`O tipo de Pokémon que você mais tem é: *${tipoDominante}* com ${maxQuantidade} Pokémon(s)!\n\nE sua insígnia é...`);
-            const imagemInsignia = await MessageMedia.fromUrl(checaInsignia(tipoDominante))
+            const imagemInsignia = await MessageMedia.fromUrl(insigniaUrl)
             await client.sendMessage(msg.from, imagemInsignia, { sendMediaAsSticker: true, stickerAuthor: "Criado por Dolores", stickerName: "Bot de Perpetva ⚡" })
         }
-        
+
     } catch (erro) {
         console.error('Erro ao verificar o tipo dominante:', erro);
         await client.sendMessage('Ocorreu um erro ao verificar seu tipo dominante.');
@@ -354,9 +366,13 @@ async function getInsignia(msg, chat, client) {
 }
 
 async function getTiposPokemon(pokemon) {
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`);
-    const data = await response.json();
-    return data.types.map(tipoInfo => tipoInfo.type.name);
+    try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`);
+        const data = await response.json();
+        return data.types.map(tipoInfo => tipoInfo.type.name);
+    } catch (erro) {
+        console.log('erro getTiposPokemon: ', erro);
+    }
 }
 
 module.exports = { chamaPokemon, enviaPokedex, spawnaPokemon, pegaPokemon, checaSeAbilitado, getRank, pokemonFugiu, getInsignia }

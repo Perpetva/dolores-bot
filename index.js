@@ -28,10 +28,10 @@ let contadorMensagens = qtdeSpawn / 2;
 const chamados = ['.bot', '/bot', '/menu', '.menu', 'bot'];
 
 /*
-const MONGODB_URI = "mongodb+srv://perpetva:uvacomleite@naoaguentomais.c6gz6cq.mongodb.net/?retryWrites=true&w=majority&appName=naoaguentomais";
+const MONGO_DB_URI = process.env.MONGODB_URI;
 
 Conexão com o MongoDB
- mongoose.connect(MONGODB_URI).then(() => {
+ mongoose.connect(MONGO_DB_URI).then(() => {
     const store = new MongoStore({ mongoose: mongoose });
      const client = new Client({
          puppeteer: {
