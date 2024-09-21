@@ -1,4 +1,3 @@
-const { isAxiosError } = require('axios');
 const { mandaAudio } = require('./saudacoes.js');
 
 function chamaMenu (msg, client) {
@@ -42,6 +41,9 @@ function chamaMenu (msg, client) {
     '*!horario*\n'+
     '_-> O horário em alguns lugares do mundo._\n\n'+
 
+    '*!covid*\n'+
+    '_-> Exibe dados atualizados sobre o Covid-19._\n\n'+
+
     '*!cotacao*\n'+
     '_-> Cotação de algumas moedas._\n\n'+
 
@@ -73,8 +75,3 @@ function chamaMenu (msg, client) {
 };
 
 module.exports = { chamaMenu }
-
-
-if (isAxiosError()) {
-    console.log('erro')
-}

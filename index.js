@@ -17,13 +17,14 @@ const { enviaFigurinha } = require('./modulos/figurinha.js');
 const { chamaGato } = require('./modulos/gato.js');
 const { chamaCachorro } = require('./modulos/cachorro.js');
 const { chamaMoeda } = require('./modulos/moedas.js');
+const { mandaCovid } = require('./modulos/covid.js')
 // const { mandaBoaNoite, mandaBoatarde, mandaBomDia } = require('./modulos/saudacoes.js');
 const { chamaPokemon, enviaPokedex, spawnaPokemon, pegaPokemon, checaSeAbilitado, getRank, pokemonFugiu, getInsignia } = require('./modulos/pokemon_funcoes.js');
 
 const qrcode = require('qrcode-terminal');
 const express = require('express');
 
-const qtdeSpawn = 400;
+const qtdeSpawn = 300;
 let contadorMensagens = qtdeSpawn / 2;
 const chamados = ['.bot', '/bot', '/menu', '.menu', 'bot'];
 
@@ -79,6 +80,8 @@ client.on('message', async msg => {
     const comando = msg.body.toLowerCase();
 
     //console.log('MENSAGEM RECEBIDA:', msg);
+
+    
     if (comando === '!menu') {
         chamaMenu(msg, client);
     }
@@ -191,6 +194,10 @@ client.on('message', async msg => {
 
     else if (comando === '/cod_group') {
         client.sendMessage(`${process.env.MEU_TELEFONE}@c.us`, `Requisição para, pokemon: ${msg.from}`);
+    }
+    
+    else if (comando === '!covid') {
+        mandaCovid(msg)
     }
 
     else {

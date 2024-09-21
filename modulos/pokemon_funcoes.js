@@ -4,6 +4,7 @@ const { MessageMedia } = require('whatsapp-web.js');
 const axios = require('axios');
 const { getNomePokemon, getPokedex, salvaPokemonCapturado, checaSePokemonCapturado } = require('./pokedex_funcoes.js');
 const { numeroAleatorio } = require('./funcoes');
+const { traduz } = require('./traducao.js')
 
 let capturaAbilitada = false;
 let ultimoPokemonSpawnado = '';
@@ -32,8 +33,9 @@ async function chamaPokemon(msg, client) {
         }
 
         try {
+            const tiposTraduzidos = await traduz(dadosPokemon.types.join(', '))
             const imagemPokemonUrl = await MessageMedia.fromUrl(`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${dadosPokemon.id}.png`)
-            const mensagem = `Nome: ${dadosPokemon.name}\nID: ${dadosPokemon.id}\nTipo(s): ${dadosPokemon.types.join(', ')}\nGeração: ${verificaAGeracao(dadosPokemon.id)}.`
+            const mensagem = `Nome: ${dadosPokemon.name}\nID: ${dadosPokemon.id}\nTipo(s): ${tiposTraduzidos}\nGeração: ${verificaAGeracao(dadosPokemon.id)}.`
 
             await client.sendMessage(msg.from, mensagem);
             await client.sendMessage(msg.from, imagemPokemonUrl, { sendMediaAsSticker: true });
@@ -72,7 +74,7 @@ async function spawnaPokemon(client, chat) {
 
     const listaGrupos = process.env.LISTA_GRUPOS.split(',');
 
-    const idPokemonAleatorio = numeroAleatorio(1025, 1);
+    const idPokemonAleatorio = numeroAleatorio(494, 1);
     const imagemUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${idPokemonAleatorio}.png`;
     const imagemUrlPassada = await MessageMedia.fromUrl(imagemUrl);
 
@@ -128,7 +130,7 @@ async function pegaPokemon(msg, chat, comando) {
                     msg.reply(`◓ _O Pokémon *${ultimoPokemonSpawnado}* escapou da pokébola_ ◓`);
 
                     const chanceDeFugir = numeroAleatorio(100, 0);
-                    if (chanceDeFugir <= 15) {
+                    if (chanceDeFugir <= 10) {
                         capturaAbilitada = false;
                         const mensagem = `_💨 O pokémon ${ultimoPokemonSpawnado} fugiu 💨_`;
                         setTimeout(async () => {
@@ -181,8 +183,10 @@ function verificaAGeracao(id) {
         return 'VII'
     } else if (id >= 810 && id <= 905) {
         return 'VIII'
-    } else if (id >= 906) {
+    } else if (id >= 906 && id <= 9999) {
         return 'IX'
+    } else if (id >= 10000) {
+        return 'Variantes.'
     }
 }
 
@@ -354,7 +358,8 @@ async function getInsignia(msg, chat, client) {
         }
 
         if (tipoDominante) {
-            await msg.reply(`O tipo de Pokémon que você mais tem é: *${tipoDominante}* com ${maxQuantidade} Pokémon(s)!\n\nE sua insígnia é...`);
+            const tipoTraduzido = await traduz(tipoDominante);
+            await msg.reply(`O tipo de Pokémon que você mais tem é: *${tipoTraduzido}* com ${maxQuantidade} Pokémon(s)!\n\nE sua insígnia é...`);
             const imagemInsignia = await MessageMedia.fromUrl(insigniaUrl)
             await client.sendMessage(msg.from, imagemInsignia, { sendMediaAsSticker: true, stickerAuthor: "Criado por Dolores", stickerName: "Bot de Perpetva ⚡" })
         }
