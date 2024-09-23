@@ -19,6 +19,9 @@ const { chamaCachorro } = require('./modulos/cachorro.js');
 const { chamaMoeda } = require('./modulos/moedas.js');
 const { mandaCovid } = require('./modulos/covid.js');
 const { mandaFraseAnime, mandaFatoAnime } = require('./modulos/anime.js');
+const { chamaPin } = require('./modulos/pinterest.js');
+const { traduz, traduzir } = require('./modulos/traducao.js');
+const { mandaConselho } = require('./modulos/conselho.js')
 // const { mandaBoaNoite, mandaBoatarde, mandaBomDia } = require('./modulos/saudacoes.js');
 const { chamaPokemon, enviaPokedex, spawnaPokemon, pegaPokemon, checaSeAbilitado, getRank, pokemonFugiu, getInsignia } = require('./modulos/pokemon_funcoes.js');
 
@@ -26,13 +29,12 @@ const qrcode = require('qrcode-terminal');
 const express = require('express');
 
 const qtdeSpawn = 270;
-let contadorMensagens = qtdeSpawn / 2;
+let contadorMensagens = 265//qtdeSpawn / 2;
 const chamados = ['.bot', '/bot', '/menu', '.menu', 'bot'];
 
 process.on('unhandledRejection', (error) => {
     if (error.message && error.message.includes("Reaction send error")) {
         console.error("Erro de reação tratado:", error.message);
-        // Aqui você pode adicionar lógica adicional, como enviar logs para um serviço
     } else {
         console.error("Erro não tratado:", error);
     }
@@ -92,7 +94,7 @@ client.on('message', async msg => {
 
     //console.log('MENSAGEM RECEBIDA:', msg);
 
-    
+
     if (comando === '!menu') {
         chamaMenu(msg, client);
         chat.clearMessages();
@@ -162,6 +164,18 @@ client.on('message', async msg => {
         enviaPokedex(msg, chat);
     }
 
+    else if (comando.startsWith('!pin')) {
+        chamaPin(msg, client)
+    }
+
+    else if (comando.startsWith('!traduz') && comando != '!traduzir') {
+        traduz(msg);
+    }
+
+    else if (comando === '!traduzir') {
+        traduzir(msg);
+    }
+
     else if (comando === '!noticias') {
         chamaNoticias(msg, client);
     }
@@ -173,19 +187,19 @@ client.on('message', async msg => {
     else if (comando === '!receita') {
         receitaAleatoria(msg);
     }
-/*
-    else if (comando.includes('boa noite')) {
-        mandaBoaNoite(msg, client);
-    }
-
-    else if (comando.includes('boa tarde')) {
-        mandaBoatarde(msg, client);
-    }
-
-    else if (comando.includes('bom dia')) {
-        mandaBomDia(msg, client);
-    }
-*/
+    /*
+        else if (comando.includes('boa noite')) {
+            mandaBoaNoite(msg, client);
+        }
+    
+        else if (comando.includes('boa tarde')) {
+            mandaBoatarde(msg, client);
+        }
+    
+        else if (comando.includes('bom dia')) {
+            mandaBomDia(msg, client);
+        }
+    */
     else if (comando === '!rank') {
         getRank(chat, msg);
     }
@@ -204,7 +218,7 @@ client.on('message', async msg => {
     }
 
     else if (chamados.includes(comando)) {
-        msg.reply('Para ver os comandos digite !menu.');
+//        msg.reply('Para ver os comandos digite !menu.');
         chat.clearMessages();
     }
 
@@ -219,7 +233,11 @@ client.on('message', async msg => {
     else if (comando === '!anime-fato') {
         mandaFatoAnime(msg)
     }
-    
+
+    else if (comando === '!conselho') {
+        mandaConselho(msg)
+    }
+
     else if (comando === '!covid') {
         mandaCovid(msg);
     }

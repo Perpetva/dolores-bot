@@ -47,14 +47,23 @@ function chamaMenu (msg, client) {
     '*!anime-fato*\n'+
     '_-> Curiosidades sobre animes._\n\n'+
 
+    '*!conselho*\n'+
+    '_-> Envia um conselho._\n\n'+
+
     '*!covid*\n'+
     '_-> Exibe dados atualizados sobre o Covid-19._\n\n'+
 
     '*!cotacao*\n'+
     '_-> Cotação de algumas moedas._\n\n'+
 
-    '*!waifu*\n'+
-    '_-> Um personagem feminino de anime._\n\n'+
+    '*!pin (palavra)*\n'+
+    '_-> Manda uma imagem do pinterest._\n\n'+
+
+    '*!traduz (texto)*\n'+
+    '_-> Traduz o texto enviado._\n\n'+
+
+    '*!traduzir*\n'+
+    '_-> Traduz a imagem marcada._\n\n'+
 
     '*!poke _(ID ou nome)_*\n'+
     '_-> Envia informações sobre um pokémon._\n\n'+

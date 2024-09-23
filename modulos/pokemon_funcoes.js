@@ -4,7 +4,7 @@ const { MessageMedia } = require('whatsapp-web.js');
 const axios = require('axios');
 const { getNomePokemon, getPokedex, salvaPokemonCapturado, checaSePokemonCapturado } = require('./pokedex_funcoes.js');
 const { numeroAleatorio } = require('./funcoes');
-const { traduz } = require('./traducao.js');
+const { traduzDescricao } = require('./traducao.js');
 
 let capturaAbilitada = false;
 let ultimoPokemonSpawnado = '';
@@ -13,35 +13,47 @@ const cooldowns = {};
 
 async function chamaPokemon(msg, client) {
     const ipoke = msg.body.split(' ')[0];
-    if (ipoke != '!poke'.toLowerCase()){
+    if (ipoke != '!poke'.toLowerCase()) {
         msg.reply('Você quis dizer !poke?');
         return;
     }
 
     const nomePokemon = msg.body.split(' ')[1];
-    let dadosPokemon
+
+    let dadosPokemon;
+    let retornoEspecies;
 
     if (nomePokemon) {
         try {
             const retorno = await axios.get(`http://localhost:3000/pokemon/${nomePokemon.toLowerCase()}`);
             dadosPokemon = retorno.data;
+            retornoEspecies = await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${dadosPokemon.id}`);
 
         } catch (erro) {
-            console.log('Erro em chamar o pokemon.', erro);
-            msg.reply('Você digitou um ID ou nome do pokémon errado.');
-            return
+            console.log('Erro em chamar o pokemon.');
+            if (erro == axios.AxiosError) {
+                msg.reply('Você digitou um ID ou nome do pokémon errado.');
+            }
         }
 
         try {
-            const tiposTraduzidos = await traduz(dadosPokemon.types.join(', '))
+            let descricaoTraduzida = 'Sem descrição.';
+            if (retornoEspecies) {
+                const descricaoArray = retornoEspecies.data.flavor_text_entries.filter(entry => entry.language.name === 'en');
+                const descricao = descricaoArray.length > 0 ? descricaoArray[0].flavor_text.replace(/\n/g, ' ') : 'Descrição não disponível.';
+                descricaoTraduzida = await traduzDescricao(descricao);
+            }
+
+            const tiposTraduzidos = traduzTiposDominantes(dadosPokemon.types)
             const imagemPokemonUrl = await MessageMedia.fromUrl(`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${dadosPokemon.id}.png`)
-            const mensagem = `Nome: ${dadosPokemon.name}\nID: ${dadosPokemon.id}\nTipo(s): ${tiposTraduzidos}\nGeração: ${verificaAGeracao(dadosPokemon.id)}.`
+
+            const mensagem = `Nome: ${dadosPokemon.name}\nID: ${dadosPokemon.id}\nTipo(s): ${tiposTraduzidos}\nGeração: ${verificaAGeracao(dadosPokemon.id)}\nDescrição: ${descricaoTraduzida}`
 
             await client.sendMessage(msg.from, mensagem);
             await client.sendMessage(msg.from, imagemPokemonUrl, { sendMediaAsSticker: true });
 
         } catch (erroImagem) {
-            console.log('Erro ao obter a imagem do Pokémon:', erroImagem);
+            console.log('Erro ao obter a imagem do Pokémon.');
             await client.sendMessage(msg.from, `Erro ao obter a imagem do Pokémon.`);
         }
 
@@ -72,10 +84,9 @@ async function spawnaPokemon(client, chat) {
     capturaAbilitada = true;
     const meuTelefone = process.env.MEU_TELEFONE
 
-    // const listaGrupos = process.env.LISTA_GRUPOS.split(',');
     const listaGrupos = process.env.LISTA_GRUPOS.split(',');
- 
-    const idPokemonAleatorio = numeroAleatorio(494, 1);
+
+    const idPokemonAleatorio = await numeroAleatorio(494, 1);
     const imagemUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${idPokemonAleatorio}.png`;
     const imagemUrlPassada = await MessageMedia.fromUrl(imagemUrl);
 
@@ -83,7 +94,7 @@ async function spawnaPokemon(client, chat) {
         grupoSelecionado = listaGrupos[numeroAleatorio(listaGrupos.length, 0)]
 
         await client.sendMessage(grupoSelecionado, imagemUrlPassada, { sendMediaAsSticker: true, stickerAuthor: "Criado por Dolores", stickerName: "Bot de Perpetva ⚡" });
-        
+
         ultimoPokemonSpawnado = await getNomePokemon(idPokemonAleatorio);
         client.sendMessage(`${meuTelefone}@c.us`, ultimoPokemonSpawnado);
 
@@ -293,6 +304,9 @@ function checaInsignia(tipoDominante) {
         case "bug":
             return insigniasUrl.bug
 
+        case "ghost":
+            return insigniasUrl.ghost
+
         case "steel":
             return insigniasUrl.steel
 
@@ -308,6 +322,31 @@ function checaInsignia(tipoDominante) {
         default:
             return null;
     }
+}
+
+function traduzTiposDominantes(tipos) {
+    const traducoes = {
+        normal: "Normal",
+        fire: "Fogo",
+        water: "Água",
+        grass: "Planta",
+        flying: "Voador",
+        fighting: "Lutador",
+        poison: "Veneno",
+        eletric: "Elétrico",
+        ground: "Terra",
+        rock: "Pedra",
+        psychic: "Psíquico",
+        ice: "Gelo",
+        bug: "Inseto",
+        ghost: "Fantasma",
+        steel: "Aço",
+        dragon: "Dragão",
+        dark: "Sombrio",
+        fairy: "Fada"
+    };
+
+    return tipos.map(tipo => traducoes[tipo] || null).filter(t => t !== null).join(', ');
 }
 
 async function getInsignia(msg, chat, client) {
@@ -358,7 +397,7 @@ async function getInsignia(msg, chat, client) {
         }
 
         if (tipoDominante) {
-            const tipoTraduzido = await traduz(tipoDominante);
+            const tipoTraduzido = traduzTiposDominantes([tipoDominante]);
             await msg.reply(`O tipo de Pokémon que você mais tem é: *${tipoTraduzido}* com ${maxQuantidade} Pokémon(s)!\n\nE sua insígnia é...`);
             const imagemInsignia = await MessageMedia.fromUrl(insigniaUrl)
             await client.sendMessage(msg.from, imagemInsignia, { sendMediaAsSticker: true, stickerAuthor: "Criado por Dolores", stickerName: "Bot de Perpetva ⚡" })
