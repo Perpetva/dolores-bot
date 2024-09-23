@@ -37,6 +37,12 @@ function enviaChance (msg) {
     const mensagemRecebida = msg.body.toLowerCase();
     const mensagemInteira = mensagemRecebida.split('!')[1]
 
+    const iChance = msg.body.split(' ')[0];
+    if (iChance != '!chance'.toLowerCase()){
+        msg.reply('Você quis dizer !chance?');
+        return;
+    }
+
     if (!mensagemRecebida.split(' ')[1]) {
         msg.reply('Digite algo após !chance');
         return

@@ -17,16 +17,26 @@ const { enviaFigurinha } = require('./modulos/figurinha.js');
 const { chamaGato } = require('./modulos/gato.js');
 const { chamaCachorro } = require('./modulos/cachorro.js');
 const { chamaMoeda } = require('./modulos/moedas.js');
-const { mandaCovid } = require('./modulos/covid.js')
+const { mandaCovid } = require('./modulos/covid.js');
+const { mandaFraseAnime, mandaFatoAnime } = require('./modulos/anime.js');
 // const { mandaBoaNoite, mandaBoatarde, mandaBomDia } = require('./modulos/saudacoes.js');
 const { chamaPokemon, enviaPokedex, spawnaPokemon, pegaPokemon, checaSeAbilitado, getRank, pokemonFugiu, getInsignia } = require('./modulos/pokemon_funcoes.js');
 
 const qrcode = require('qrcode-terminal');
 const express = require('express');
 
-const qtdeSpawn = 300;
+const qtdeSpawn = 270;
 let contadorMensagens = qtdeSpawn / 2;
 const chamados = ['.bot', '/bot', '/menu', '.menu', 'bot'];
+
+process.on('unhandledRejection', (error) => {
+    if (error.message && error.message.includes("Reaction send error")) {
+        console.error("Erro de reação tratado:", error.message);
+        // Aqui você pode adicionar lógica adicional, como enviar logs para um serviço
+    } else {
+        console.error("Erro não tratado:", error);
+    }
+});
 
 /*
 const MONGO_DB_URI = process.env.MONGODB_URI;
@@ -63,6 +73,7 @@ app.listen(PORT, () => {
 
 client.once('ready', () => {
     console.log('Pronto!');
+    client.clearMessagesCache();
 });
 
 client.on('qr', qr => {
@@ -84,6 +95,7 @@ client.on('message', async msg => {
     
     if (comando === '!menu') {
         chamaMenu(msg, client);
+        chat.clearMessages();
     }
 
     else if (comando === '!gato') {
@@ -108,6 +120,7 @@ client.on('message', async msg => {
 
     else if (comando === '!clima') {
         chamaClima(msg, client);
+        chat.clearMessages();
     }
 
     else if (comando === '!horario') {
@@ -116,6 +129,7 @@ client.on('message', async msg => {
 
     else if (comando === '!todos') {
         chamaTodos(msg, chat);
+        chat.clearMessages();
     }
 
     else if (comando === '!cotacao') {
@@ -140,7 +154,7 @@ client.on('message', async msg => {
         msg.reply('Não há nenhum pokémon para capturar.');
     }
 
-    else if (checaSeAbilitado() && contadorMensagens >= qtdeSpawn - 80) {
+    else if (checaSeAbilitado() && contadorMensagens >= qtdeSpawn - 40) {
         pokemonFugiu(client);
     }
 
@@ -178,6 +192,7 @@ client.on('message', async msg => {
 
     else if (comando.startsWith('!chance')) {
         enviaChance(msg);
+        chat.clearMessages();
     }
 
     else if (comando === '!listar megas') {
@@ -189,21 +204,30 @@ client.on('message', async msg => {
     }
 
     else if (chamados.includes(comando)) {
-        msg.reply('Para ver os comandos digite !menu.')
+        msg.reply('Para ver os comandos digite !menu.');
+        chat.clearMessages();
     }
 
     else if (comando === '/cod_group') {
         client.sendMessage(`${process.env.MEU_TELEFONE}@c.us`, `Requisição para, pokemon: ${msg.from}`);
     }
+
+    else if (comando === '!anime-frase') {
+        mandaFraseAnime(msg)
+    }
+
+    else if (comando === '!anime-fato') {
+        mandaFatoAnime(msg)
+    }
     
     else if (comando === '!covid') {
-        mandaCovid(msg)
+        mandaCovid(msg);
     }
 
     else {
         if (!chat.isGroup) {
             const mensagem = 'Olá!\nCaso queria saber alguma função digite !menu.'
-            client.sendMessage(msg.from, mensagem)
+            client.sendMessage(msg.from, mensagem);
         }
     }
 });

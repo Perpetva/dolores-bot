@@ -4,7 +4,7 @@ const { MessageMedia } = require('whatsapp-web.js');
 const axios = require('axios');
 const { getNomePokemon, getPokedex, salvaPokemonCapturado, checaSePokemonCapturado } = require('./pokedex_funcoes.js');
 const { numeroAleatorio } = require('./funcoes');
-const { traduz } = require('./traducao.js')
+const { traduz } = require('./traducao.js');
 
 let capturaAbilitada = false;
 let ultimoPokemonSpawnado = '';
@@ -72,8 +72,9 @@ async function spawnaPokemon(client, chat) {
     capturaAbilitada = true;
     const meuTelefone = process.env.MEU_TELEFONE
 
+    // const listaGrupos = process.env.LISTA_GRUPOS.split(',');
     const listaGrupos = process.env.LISTA_GRUPOS.split(',');
-
+ 
     const idPokemonAleatorio = numeroAleatorio(494, 1);
     const imagemUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${idPokemonAleatorio}.png`;
     const imagemUrlPassada = await MessageMedia.fromUrl(imagemUrl);
@@ -81,8 +82,8 @@ async function spawnaPokemon(client, chat) {
     try {
         grupoSelecionado = listaGrupos[numeroAleatorio(listaGrupos.length, 0)]
 
-        client.sendMessage(grupoSelecionado, imagemUrlPassada, { sendMediaAsSticker: true, stickerAuthor: "Criado por Dolores", stickerName: "Bot de Perpetva ⚡" });
-
+        await client.sendMessage(grupoSelecionado, imagemUrlPassada, { sendMediaAsSticker: true, stickerAuthor: "Criado por Dolores", stickerName: "Bot de Perpetva ⚡" });
+        
         ultimoPokemonSpawnado = await getNomePokemon(idPokemonAleatorio);
         client.sendMessage(`${meuTelefone}@c.us`, ultimoPokemonSpawnado);
 
@@ -228,16 +229,15 @@ async function getRank(chat, msg) {
     } else {
         msg.reply("Esse comando só funciona em grupos.");
     }
-
 }
 
 function checaInsignia(tipoDominante) {
     const insigniasUrl = {
         "normal": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e8ddc4da-23dd-4502-b65b-378c9cfe5efa/dffq8c6-b0aac04a-4bdc-4b35-b980-d3ef884a4e0d.png/v1/fill/w_894,h_894/balance_badge_by_jormxdos_dffq8c6-pre.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI4MCIsInBhdGgiOiJcL2ZcL2U4ZGRjNGRhLTIzZGQtNDUwMi1iNjViLTM3OGM5Y2ZlNWVmYVwvZGZmcThjNi1iMGFhYzA0YS00YmRjLTRiMzUtYjk4MC1kM2VmODg0YTRlMGQucG5nIiwid2lkdGgiOiI8PTEyODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.-AJ-LhbZ2D6fCGc9yiH91V9DXx8WhVrPfACZy_LmMtE",
         "fire": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e8ddc4da-23dd-4502-b65b-378c9cfe5efa/dffq8bq-0f79e22e-81b8-4e35-820f-7fe22a8df9c6.png/v1/fill/w_894,h_894/heat_badge_by_jormxdos_dffq8bq-pre.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI4MCIsInBhdGgiOiJcL2ZcL2U4ZGRjNGRhLTIzZGQtNDUwMi1iNjViLTM3OGM5Y2ZlNWVmYVwvZGZmcThicS0wZjc5ZTIyZS04MWI4LTRlMzUtODIwZi03ZmUyMmE4ZGY5YzYucG5nIiwid2lkdGgiOiI8PTEyODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.9pvXmXrOONStXiuqZqSSI9SWA09LZRQb5K9AIG4rcDY",
-        "water": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e8ddc4da-23dd-4502-b65b-378c9cfe5efa/dffpqke-06f64784-e90f-4223-ae46-6c59fa337b1c.png/v1/fill/w_894,h_894/cascade_badge_by_jormxdos_dffpqke-pre.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI4MCIsInBhdGgiOiJcL2ZcL2U4ZGRjNGRhLTIzZGQtNDUwMi1iNjViLTM3OGM5Y2ZlNWVmYVwvZGZmcHFrZS0wNmY2NDc4NC1lOTBmLTQyMjMtYWU0Ni02YzU5ZmEzMzdiMWMucG5nIiwid2lkdGgiOiI8PTEyODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.0SQtaek0HnxtTPbFaism7p1qwQMXbuqLcgrrsxM4oHU",
-        "grass": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e8ddc4da-23dd-4502-b65b-378c9cfe5efa/dffprjy-92a00683-bbc0-4490-8c8e-722ecaf42b84.png/v1/fill/w_894,h_894/rainbow_badge_by_jormxdos_dffprjy-pre.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI4MCIsInBhdGgiOiJcL2ZcL2U4ZGRjNGRhLTIzZGQtNDUwMi1iNjViLTM3OGM5Y2ZlNWVmYVwvZGZmcHJqeS05MmEwMDY4My1iYmMwLTQ0OTAtOGM4ZS03MjJlY2FmNDJiODQucG5nIiwid2lkdGgiOiI8PTEyODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.Bqx-kyrIFsyWX8qZVD9fjgm0YFpNM1UqV8t97RPH2JM",
-        "flying": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e8ddc4da-23dd-4502-b65b-378c9cfe5efa/dffq8ck-b6190de5-2ca3-4ca0-b552-a08420a77e68.png/v1/fill/w_894,h_894/feather_badge_by_jormxdos_dffq8ck-pre.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI4MCIsInBhdGgiOiJcL2ZcL2U4ZGRjNGRhLTIzZGQtNDUwMi1iNjViLTM3OGM5Y2ZlNWVmYVwvZGZmcThjay1iNjE5MGRlNS0yY2EzLTRjYTAtYjU1Mi1hMDg0MjBhNzdlNjgucG5nIiwid2lkdGgiOiI8PTEyODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.-n7xntTycDc1l9CHeInC6i9q_vPwdw-Cu1uKqearouY",
+        "water": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e8ddc4da-23dd-4502-b65b-378c9cfe5efa/dfftdqy-894e8561-f288-4a28-a80f-d69ad6864929.png/v1/fill/w_894,h_894/sawyer_badge_anime_by_jormxdos_dfftdqy-pre.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI4MCIsInBhdGgiOiJcL2ZcL2U4ZGRjNGRhLTIzZGQtNDUwMi1iNjViLTM3OGM5Y2ZlNWVmYVwvZGZmdGRxeS04OTRlODU2MS1mMjg4LTRhMjgtYTgwZi1kNjlhZDY4NjQ5MjkucG5nIiwid2lkdGgiOiI8PTEyODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.9nP5p1sEZQy2D7w8FR7jfjb5PSAlZLKEuZHHPeLpRY4",
+        "grass": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e8ddc4da-23dd-4502-b65b-378c9cfe5efa/dfftdny-9954c3de-b93d-468f-850b-67f91772e69c.png/v1/fill/w_1280,h_1280/plant_badge_by_jormxdos_dfftdny-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI4MCIsInBhdGgiOiJcL2ZcL2U4ZGRjNGRhLTIzZGQtNDUwMi1iNjViLTM3OGM5Y2ZlNWVmYVwvZGZmdGRueS05OTU0YzNkZS1iOTNkLTQ2OGYtODUwYi02N2Y5MTc3MmU2OWMucG5nIiwid2lkdGgiOiI8PTEyODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.SzoBTquNxYdl6-tptRmvvRVURdfU8ZEJaxn_YEMQ0y0",
+        "flying": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e8ddc4da-23dd-4502-b65b-378c9cfe5efa/dffskui-c20f4e36-9c14-430d-bec9-1047a02e2cee.png/v1/fill/w_894,h_894/jet_badge_by_jormxdos_dffskui-pre.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI4MCIsInBhdGgiOiJcL2ZcL2U4ZGRjNGRhLTIzZGQtNDUwMi1iNjViLTM3OGM5Y2ZlNWVmYVwvZGZmc2t1aS1jMjBmNGUzNi05YzE0LTQzMGQtYmVjOS0xMDQ3YTAyZTJjZWUucG5nIiwid2lkdGgiOiI8PTEyODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.9YWOGpnQZKtO-thzowJqVzooqR7gk3x9iSJoNeaJz1A",
         "fighting": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e8ddc4da-23dd-4502-b65b-378c9cfe5efa/dfftdnm-54adb564-c161-4565-b149-49bc58ee0a6d.png/v1/fill/w_894,h_894/rumble_badge_by_jormxdos_dfftdnm-pre.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI4MCIsInBhdGgiOiJcL2ZcL2U4ZGRjNGRhLTIzZGQtNDUwMi1iNjViLTM3OGM5Y2ZlNWVmYVwvZGZmdGRubS01NGFkYjU2NC1jMTYxLTQ1NjUtYjE0OS00OWJjNThlZTBhNmQucG5nIiwid2lkdGgiOiI8PTEyODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.gVeF3Gb1mUAPHkktZvflcJx_owv0s5Yo4i52dd6sQZ0",
         "poison": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e8ddc4da-23dd-4502-b65b-378c9cfe5efa/dffsktb-1d05182b-20ef-4f51-a3f7-4a8848f6ba80.png/v1/fill/w_894,h_894/toxic_badge_by_jormxdos_dffsktb-pre.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI4MCIsInBhdGgiOiJcL2ZcL2U4ZGRjNGRhLTIzZGQtNDUwMi1iNjViLTM3OGM5Y2ZlNWVmYVwvZGZmc2t0Yi0xZDA1MTgyYi0yMGVmLTRmNTEtYTNmNy00YTg4NDhmNmJhODAucG5nIiwid2lkdGgiOiI8PTEyODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.4FUTRE0e1xejiPsO1_7Ln6Kl4RaBQHW-Qya9EqM4fpw",
         "eletric": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e8ddc4da-23dd-4502-b65b-378c9cfe5efa/dffsktw-fcba551f-2f00-4efc-b3be-8575cedfd88c.png/v1/fill/w_894,h_894/bolt_badge_by_jormxdos_dffsktw-pre.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI4MCIsInBhdGgiOiJcL2ZcL2U4ZGRjNGRhLTIzZGQtNDUwMi1iNjViLTM3OGM5Y2ZlNWVmYVwvZGZmc2t0dy1mY2JhNTUxZi0yZjAwLTRlZmMtYjNiZS04NTc1Y2VkZmQ4OGMucG5nIiwid2lkdGgiOiI8PTEyODAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.mQ4RaJeT6rIE6E6i-DhkfIHQ7gfdgFLX5y4ICuf7-nY",

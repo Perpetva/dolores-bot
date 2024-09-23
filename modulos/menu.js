@@ -41,11 +41,20 @@ function chamaMenu (msg, client) {
     '*!horario*\n'+
     '_-> O horário em alguns lugares do mundo._\n\n'+
 
+    '*!anime-frase*\n'+
+    '_-> Frase aleatória de um anime._\n\n'+
+
+    '*!anime-fato*\n'+
+    '_-> Curiosidades sobre animes._\n\n'+
+
     '*!covid*\n'+
     '_-> Exibe dados atualizados sobre o Covid-19._\n\n'+
 
     '*!cotacao*\n'+
     '_-> Cotação de algumas moedas._\n\n'+
+
+    '*!waifu*\n'+
+    '_-> Um personagem feminino de anime._\n\n'+
 
     '*!poke _(ID ou nome)_*\n'+
     '_-> Envia informações sobre um pokémon._\n\n'+
