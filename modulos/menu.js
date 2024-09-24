@@ -68,8 +68,8 @@ function chamaMenu (msg, client) {
     '*!poke _(ID ou nome)_*\n'+
     '_-> Envia informações sobre um pokémon._\n\n'+
 
-    '*!noticias*\n'+
-    '_-> 5 noticias atuais._\n\n'+
+    '*!noticia*\n'+
+    '_-> Uma noticia atual._\n\n'+
 
     '*!receita*\n'+
     '_-> Receita alearória._\n\n'+

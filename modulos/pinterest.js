@@ -6,7 +6,7 @@ const { numeroAleatorio } = require('./funcoes');
 const chaveApi = process.env.CHAVE_RAPID_API;
 
 async function chamaPin(msg, client) {
-    if (msg.body.split(' ')[0] != '!pin') {
+    if (msg.body.split(' ')[0] != '!pin'.toLowerCase()) {
         msg.reply('Você quis dizer !pin?');
         return;
     }

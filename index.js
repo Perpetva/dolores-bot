@@ -176,7 +176,7 @@ client.on('message', async msg => {
         traduzir(msg);
     }
 
-    else if (comando === '!noticias') {
+    else if (comando === '!noticia') {
         chamaNoticias(msg, client);
     }
 
