@@ -9,15 +9,16 @@ const chaveNews = process.env.CHAVE_NEWSAPI;
 const URL = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${chaveNews}`;
 
 async function chamaNoticias (msg, client) {
-    const numero = numeroAleatorio(7, 0);
+    let numero = numeroAleatorio(10, 0);
+
+    msg.reply('_...Aguarde..._');
 
     try {
         const response = await axios.get(URL);
         const artigo = response.data.articles;
 
-        if (!artigo[numero].source.id) {
-            msg.reply('Não foi possível mandar a notícia, tente novamente');
-            return;
+        while (!artigo[numero].source.id) {
+            numero = numeroAleatorio(10, 0);
         }
 
         const titulo = artigo[numero].title;
@@ -26,7 +27,7 @@ async function chamaNoticias (msg, client) {
         const urlImagem = artigo[numero].urlToImage;
         const conteudo = artigo[numero].content;
 
-        const imagem = await MessageMedia.fromUrl(urlImagem);
+        const imagem = await MessageMedia.fromUrl(urlImagem, { unsafeMime: true });
 
         const envia = `*${titulo}*\n\n_${descricao}_\n\n${conteudo}\n\n${urlMateria}`;
         const enviaTraduzido = await traduzDescricao(envia);
@@ -36,7 +37,7 @@ async function chamaNoticias (msg, client) {
         
     } catch (erro) {
         console.log('Erro ao buscar as notícias:', erro);
-        msg.reply('Não foi possivel mandar as notícias.');
+        msg.reply('Não foi possivel mandar as notícia.');
     }
 };
 

@@ -371,6 +371,13 @@ async function getInsignia(msg, chat, client) {
         for (const pokemon of usuarioPokedex) {
             const tipos = await getTiposPokemon(pokemon);
 
+            ///////
+            if (!tipos || tipos.length === 0) {
+                console.log(`Tipos não encontrados para Pokémon: ${pokemon}`);
+                continue; // Pula para o próximo Pokémon
+            }      
+            ///////  
+
             for (const tipo of tipos) {
                 if (tiposContagem[tipo]) {
                     tiposContagem[tipo]++;
@@ -412,10 +419,18 @@ async function getInsignia(msg, chat, client) {
 async function getTiposPokemon(pokemon) {
     try {
         const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`);
+
+        /////////////
+        if (!response.ok) {
+            throw new Error(`Erro ao buscar Pokémon: ${response.statusText}`);
+        }
+        ////////////////
+
         const data = await response.json();
         return data.types.map(tipoInfo => tipoInfo.type.name);
     } catch (erro) {
         console.log('erro getTiposPokemon: ', erro);
+        return [];
     }
 }
 
