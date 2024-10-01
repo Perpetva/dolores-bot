@@ -30,7 +30,7 @@ async function chamaNoticias (msg, client) {
         const imagem = await MessageMedia.fromUrl(urlImagem, { unsafeMime: true });
 
         const envia = `*${titulo}*\n\n_${descricao}_\n\n${conteudo}\n\n${urlMateria}`;
-        const enviaTraduzido = await traduzDescricao(envia);
+        const enviaTraduzido = await traduzDescricao(envia, 'en');
 
         mandaAudio('./saudacoes_audios/noticia.mp3', msg, client, '📰');
         client.sendMessage(msg.from, imagem, { caption: enviaTraduzido });

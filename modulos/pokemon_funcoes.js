@@ -41,7 +41,7 @@ async function chamaPokemon(msg, client) {
             if (retornoEspecies) {
                 const descricaoArray = retornoEspecies.data.flavor_text_entries.filter(entry => entry.language.name === 'en');
                 const descricao = descricaoArray.length > 0 ? descricaoArray[0].flavor_text.replace(/\n/g, ' ') : 'Descrição não disponível.';
-                descricaoTraduzida = await traduzDescricao(descricao);
+                descricaoTraduzida = await traduzDescricao(descricao, 'en');
             }
 
             const tiposTraduzidos = traduzTiposDominantes(dadosPokemon.types)
@@ -86,7 +86,7 @@ async function spawnaPokemon(client, chat) {
 
     const listaGrupos = process.env.LISTA_GRUPOS.split(',');
 
-    const idPokemonAleatorio = await numeroAleatorio(494, 1);
+    const idPokemonAleatorio = await numeroAleatorio(1025, 1);
     const imagemUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${idPokemonAleatorio}.png`;
     const imagemUrlPassada = await MessageMedia.fromUrl(imagemUrl);
 
@@ -112,6 +112,12 @@ function pokemonFugiu(client) {
 }
 
 async function pegaPokemon(msg, chat, comando) {
+    const ipegar = msg.body.split(' ')[0];
+    if (ipegar != '!p'.toLowerCase() || ipegar != '!pegar'.toLowerCase()) {
+        msg.reply('Você quis dizer !pegar?');
+        return;
+    }
+
     const comandoInteiro = comando.split(' ');
     if (comandoInteiro.length < 2) {
         await chat.sendMessage('Você precisa especificar o nome do Pokémon que deseja capturar.');

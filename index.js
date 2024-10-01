@@ -91,6 +91,7 @@ client.on('message', async msg => {
 
     const chat = await msg.getChat();
     const comando = msg.body.toLowerCase();
+    const verificaPegar = comando.startsWith('!pegar') || comando.startsWith('!p');
 
     //console.log('MENSAGEM RECEBIDA:', msg);
 
@@ -148,7 +149,8 @@ client.on('message', async msg => {
         spawnaPokemon(client, chat);
     }
 
-    else if (comando.startsWith('!pegar') && checaSeAbilitado()) {
+    
+    else if (verificaPegar && checaSeAbilitado()) {
         pegaPokemon(msg, chat, comando);
     }
 
@@ -185,8 +187,9 @@ client.on('message', async msg => {
     }
 
     else if (comando === '!receita') {
-        receitaAleatoria(msg);
+        receitaAleatoria(msg, client);
     }
+
     /*
         else if (comando.includes('boa noite')) {
             mandaBoaNoite(msg, client);

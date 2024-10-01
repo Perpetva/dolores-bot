@@ -5,7 +5,7 @@ async function mandaConselho(msg) {
     try {
         const response = await axios.get('https://api.adviceslip.com/advice')
         const mensagem = response.data.slip.advice
-        const mensagemTraduzida = await traduzDescricao(mensagem)
+        const mensagemTraduzida = await traduzDescricao(mensagem, 'en')
 
         msg.reply(`Conselho... _${mensagemTraduzida}_`);
     } catch (erro) {

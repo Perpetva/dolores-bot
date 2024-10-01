@@ -19,7 +19,7 @@ async function chamaPin(msg, client) {
             url: 'https://unofficial-pinterest-api.p.rapidapi.com/pinterest/pins/relevance',
             params: {
                 keyword: comandoInteiro,
-                num: '5'
+                num: '3'
             },
             headers: {
                 'x-rapidapi-key': chaveApi,
@@ -34,7 +34,7 @@ async function chamaPin(msg, client) {
             return;
         }
          
-        const ids = [response.data.data[0].id, response.data.data[1].id, response.data.data[2].id, response.data.data[3].id, response.data.data[4].id];
+        const ids = [response.data.data[0].id, response.data.data[1].id, response.data.data[2].id];
 
         client.sendMessage(msg.from, '_A foto está sendo enviada, aguarde..._');
 
@@ -64,7 +64,7 @@ async function chamaPin(msg, client) {
         const fotoEscolhida = imageUrls[numeroAleatorio(imageUrls.length, 0)];
         const media = await MessageMedia.fromUrl(fotoEscolhida);
 
-        msg.reply(media);
+        await msg.reply(media);
         await browser.close();
 
     } catch (erro) {

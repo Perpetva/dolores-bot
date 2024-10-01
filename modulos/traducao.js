@@ -2,7 +2,7 @@ const axios = require('axios');
 
 const apiDeepTranslate = process.env.CHAVE_RAPID_API
 
-async function getAPi(texto) {
+async function getAPi(texto, lingua) {
     return {
         method: 'POST',
         url: 'https://deep-translate1.p.rapidapi.com/language/translate/v2',
@@ -13,15 +13,15 @@ async function getAPi(texto) {
         },
         data: {
             q: texto,
-            source: 'en',
+            source: lingua,
             target: 'pt'
         }
     };
 }
 
-async function traduzDescricao(descricao) {
+async function traduzDescricao(descricao, lingua) {
     try {
-        const options = await getAPi(descricao);
+        const options = await getAPi(descricao, lingua);
         const response = await axios.request(options);
 
         const textoTraduzido = response.data.data.translations.translatedText;

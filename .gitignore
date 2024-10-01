@@ -13,3 +13,6 @@ package-lock.json
 
 # pasta de midias
 downloaded-media/
+
+# config hospedagem
+discloud.config
