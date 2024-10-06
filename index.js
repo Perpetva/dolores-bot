@@ -29,16 +29,8 @@ const qrcode = require('qrcode-terminal');
 const express = require('express');
 
 const qtdeSpawn = 270;
-let contadorMensagens = 265//qtdeSpawn / 2;
+let contadorMensagens = 265 //qtdeSpawn / 2;
 const chamados = ['.bot', '/bot', '/menu', '.menu', 'bot'];
-
-process.on('unhandledRejection', (error) => {
-    if (error.message && error.message.includes("Reaction send error")) {
-        console.error("Erro de reação tratado:", error.message);
-    } else {
-        console.error("Erro não tratado:", error);
-    }
-});
 
 /*
 const MONGO_DB_URI = process.env.MONGODB_URI;
@@ -59,10 +51,19 @@ Conexão com o MongoDB
      });
 */
 
+process.on('unhandledRejection', (error) => {
+    if (error.message && error.message.includes("Reaction send error")) {
+        console.error("Erro de reação tratado:", error.message);
+    } else {
+        console.error("Erro não tratado:", error);
+    }
+});
+
 const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
-        args: ['--no-sandbox'],
+        headless: true,
+        args: ['--no-sandbox']
     }
 });
 
@@ -91,10 +92,8 @@ client.on('message', async msg => {
 
     const chat = await msg.getChat();
     const comando = msg.body.toLowerCase();
-    const verificaPegar = comando.startsWith('!pegar') || comando.startsWith('!p');
 
     //console.log('MENSAGEM RECEBIDA:', msg);
-
 
     if (comando === '!menu') {
         chamaMenu(msg, client);
@@ -150,7 +149,7 @@ client.on('message', async msg => {
     }
 
     
-    else if (verificaPegar && checaSeAbilitado()) {
+    else if (comando.startsWith('!pegar') && checaSeAbilitado()) {
         pegaPokemon(msg, chat, comando);
     }
 

@@ -112,12 +112,6 @@ function pokemonFugiu(client) {
 }
 
 async function pegaPokemon(msg, chat, comando) {
-    const ipegar = msg.body.split(' ')[0];
-    if (ipegar != '!p'.toLowerCase() || ipegar != '!pegar'.toLowerCase()) {
-        msg.reply('Você quis dizer !pegar?');
-        return;
-    }
-
     const comandoInteiro = comando.split(' ');
     if (comandoInteiro.length < 2) {
         await chat.sendMessage('Você precisa especificar o nome do Pokémon que deseja capturar.');
@@ -339,7 +333,7 @@ function traduzTiposDominantes(tipos) {
         flying: "Voador",
         fighting: "Lutador",
         poison: "Veneno",
-        eletric: "Elétrico",
+        electric: "Elétrico",
         ground: "Terra",
         rock: "Pedra",
         psychic: "Psíquico",
