@@ -5,6 +5,13 @@ function numeroAleatorio(quantidade, numero) {
     return Math.floor(Math.random() * quantidade) + numero;
 }
 
+/*
+function numeroAleatorio(min, max) {
+    const numero = Math.random() * (max - min) + min;
+    return Math.floor(numero);
+}
+*/
+
 async function chamaTodos (msg, chat) {
     if (chat.isGroup) {
         let text = '';
@@ -33,7 +40,7 @@ async function chamaTodos (msg, chat) {
     }
 }
 
-function enviaChance (msg) {
+async function enviaChance (msg) {
     const mensagemRecebida = msg.body.toLowerCase();
     const mensagemInteira = mensagemRecebida.split('!')[1]
 
@@ -48,11 +55,11 @@ function enviaChance (msg) {
         return
     }
 
-    const chance = numeroAleatorio(100, 0);
+    const chance = await numeroAleatorio(100, 0);
 
-    const mandaChance = `A ${mensagemInteira}\n\né de... ${chance}% ${emogiChama()}`;
+    const mandaChance = `A ${mensagemInteira}\n\né de... ${chance}% ${emogiChance()}`;
 
-    function emogiChama () {
+    function emogiChance () {
         if (chance <= 100 && chance >= 76) {
             return '🤑'
         } else if (chance <= 75 && chance >= 51) {
@@ -63,8 +70,13 @@ function enviaChance (msg) {
             return '😵'
         }
     } 
-
-    msg.reply(mandaChance)
+    
+    try {
+        msg.reply(mandaChance);
+    } catch (erro) {
+        msg.reply('Não foi possível mandar a chance ;(');
+        console.log('Erro na !chance', erro)
+    }
 }
 
 function listarMegas (msg) {

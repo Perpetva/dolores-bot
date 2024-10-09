@@ -28,8 +28,8 @@ async function traduzDescricao(descricao, lingua) {
         return textoTraduzido;
 
     } catch (erro) {
-        console.log('Erro na tradução', erro);
-        return 'Não foi possível enviar a tradução'
+        console.log('Erro no "traduzDescricao"');
+        return descricao
     }
 }
 
@@ -49,7 +49,7 @@ async function traduz(msg) {
         msg.reply(textoTraduzido);
 
     } catch (erro) {
-        console.log('Erro na tradução', erro);
+        console.log('Erro no "traduz"');
         msg.reply('Não foi possível traduzir')
     }
 }
@@ -71,7 +71,7 @@ async function traduzir(msg) {
         msg.reply(textoTraduzido);
 
     } catch (erro) {
-        console.log('Erro na tradução', erro);
+        console.log('Erro no "traduzir"');
         msg.reply('Não foi possível traduzir')
     }
 }
