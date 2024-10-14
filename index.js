@@ -208,7 +208,6 @@ client.on('message', async msg => {
 
     else if (comando.startsWith('!chance')) {
         enviaChance(msg);
-        chat.clearMessages();
     }
 
     else if (comando === '!listar megas') {

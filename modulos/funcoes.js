@@ -12,7 +12,7 @@ function numeroAleatorio(min, max) {
 }
 */
 
-async function chamaTodos (msg, chat) {
+async function chamaTodos(msg, chat) {
     if (chat.isGroup) {
         let text = '';
         let mentions = [];
@@ -28,10 +28,10 @@ async function chamaTodos (msg, chat) {
                 }
 
                 await chat.sendMessage('*--Marcando todos--*\n' + text, { mentions });
-            } 
+            }
         }
 
-        if(text == '') {
+        if (text == '') {
             msg.reply('Somente adms podem marcar todos em um grupo.')
         }
 
@@ -40,48 +40,47 @@ async function chamaTodos (msg, chat) {
     }
 }
 
-async function enviaChance (msg) {
-    const mensagemRecebida = await msg.body.toLowerCase();
-    const mensagemInteira = await mensagemRecebida.split('!')[1];
-
-    const iChance = await msg.body.split(' ')[0].toLowerCase();
-    if (iChance != '!chance'){
-        msg.reply('Você quis dizer !chance?');
-        return;
-    }
-
-    if (!mensagemRecebida.split(' ')[1]) {
-        msg.reply('Digite algo após !chance');
-        return
-    }
-
-    const chance = await numeroAleatorio(100, 0);
-
-    const mandaChance = `A ${mensagemInteira}\n\né de... ${chance}% ${emogiChance()}`;
-
-    function emogiChance () {
-        if (chance <= 100 && chance >= 76) {
-            return '🤑'
-        } else if (chance <= 75 && chance >= 51) {
-            return '😝'
-        } else if (chance <= 50 && chance >= 26) {
-            return '😬'
-        } else {
-            return '😵'
-        }
-    }
-
+async function enviaChance(msg) {
     try {
+        const mensagemRecebida = await msg.body.toLowerCase();
+        const mensagemInteira = await mensagemRecebida.split('!')[1];
+
+        const iChance = await msg.body.split(' ')[0].toLowerCase();
+        if (iChance != '!chance') {
+            msg.reply('Você quis dizer !chance?');
+            return;
+        }
+
+        if (!mensagemRecebida.split(' ')[1]) {
+            msg.reply('Digite algo após !chance');
+            return
+        }
+
+        const chance = await numeroAleatorio(100, 0);
+        const mandaChance = `A ${mensagemInteira}\n\né de... ${chance}% ${emogiChance(chance)}`;
         msg.reply(mandaChance);
+        
     } catch (erro) {
         msg.reply('Não foi possível mandar a chance ;(');
         console.log('Erro na !chance', erro)
     }
 }
 
-function listarMegas (msg) {
+function emogiChance(chance) {
+    if (chance <= 100 && chance >= 76) {
+        return '🤑'
+    } else if (chance <= 75 && chance >= 51) {
+        return '😝'
+    } else if (chance <= 50 && chance >= 26) {
+        return '😬'
+    } else {
+        return '😵'
+    }
+}
+
+function listarMegas(msg) {
     const arquivoPath = path.join(__dirname, '..', 'lista-pokemon-comandos.txt');
-    
+
     try {
         const arquivo = fs.readFileSync(arquivoPath, 'utf8');
         msg.reply(`Abaixo a lista de pokémons mega pra ver com o !poke.\n\n${arquivo}`);

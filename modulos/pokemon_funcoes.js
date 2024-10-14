@@ -139,12 +139,12 @@ async function pegaPokemon(msg, chat, comando) {
 
             if (!jaCapturado) {
                 if (chanceDeCapturar <= 50) {
-                    msg.reply(`◓ _O Pokémon *${ultimoPokemonSpawnado}* escapou da pokébola_ ◓`);
+                    msg.reply(`◓ _*${ultimoPokemonSpawnado}* escapou da pokébola_ ◓`);
 
                     const chanceDeFugir = numeroAleatorio(100, 0);
                     if (chanceDeFugir <= 10) {
                         capturaAbilitada = false;
-                        const mensagem = `_💨 O pokémon ${ultimoPokemonSpawnado} fugiu 💨_`;
+                        const mensagem = `_💨 *${ultimoPokemonSpawnado}* fugiu 💨_`;
                         setTimeout(async () => {
                             await chat.sendMessage(mensagem);
                         }, 1000);
