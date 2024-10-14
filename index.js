@@ -53,9 +53,9 @@ Conexão com o MongoDB
 
 process.on('unhandledRejection', (erro) => {
     if (erro.message.includes("Erro de reação")) {
-        console.log("Erro de reação tratado:", erro.message);
+        console.log("Erro de reação tratado: ", erro.message);
     } else {
-        throw erro;
+        console.log("Outro erro: ", erro);
     }
 });
 
