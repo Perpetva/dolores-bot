@@ -157,7 +157,7 @@ async function pegaPokemon(msg, chat, comando) {
                 }
 
                 salvaPokemonCapturado(idUsuario, chat.id._serialized, ultimoPokemonSpawnado);
-                await chat.sendMessage(`*${ultimoPokemonSpawnado}* foi capturado por ${contato.number} na ${tentativa}ª tentativa!`, { mentions: [contato] });
+                await chat.sendMessage(`*${ultimoPokemonSpawnado}* foi capturado por @${contato.number} na ${tentativa}ª tentativa!`, { mentions: [contato] });
                 msg.react('🎉');
                 capturaAbilitada = false;
                 tentativa = 1
