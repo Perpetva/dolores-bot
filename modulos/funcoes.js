@@ -41,8 +41,8 @@ async function chamaTodos (msg, chat) {
 }
 
 async function enviaChance (msg) {
-    const mensagemRecebida = msg.body.toLowerCase();
-    const mensagemInteira = mensagemRecebida.split('!')[1]
+    const mensagemRecebida = await msg.body.toLowerCase();
+    const mensagemInteira = await mensagemRecebida.split('!')[1]
 
     const iChance = msg.body.split(' ')[0].toLowerCase();
     if (iChance != '!chance'){
