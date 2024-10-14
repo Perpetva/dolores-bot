@@ -127,7 +127,7 @@ async function pegaPokemon(msg, chat, comando) {
 
         if (cooldowns[idUsuario] && agora - cooldowns[idUsuario] < cooldownTempo) {
             const tempoRestante = Math.ceil((cooldownTempo - (agora - cooldowns[idUsuario])) / 1000);
-            await chat.sendMessage(`Espere ${tempoRestante} segundos para tentar capturar ${ultimoPokemonSpawnado} novamente.`);
+            await chat.sendMessage(`Espere ${tempoRestante} segundos para tentar capturar _${ultimoPokemonSpawnado}_ novamente.`);
             return;
         }
 
@@ -136,10 +136,12 @@ async function pegaPokemon(msg, chat, comando) {
 
         if (pokemonACapturar.toLowerCase() === ultimoPokemonSpawnado.toLowerCase()) {
             const jaCapturado = await checaSePokemonCapturado(idUsuario, chat.id._serialized, ultimoPokemonSpawnado);
+            let tentativa = 1;
 
             if (!jaCapturado) {
                 if (chanceDeCapturar <= 50) {
                     msg.reply(`◓ _*${ultimoPokemonSpawnado}* escapou da pokébola_ ◓`);
+                    tentativa++;
 
                     const chanceDeFugir = numeroAleatorio(100, 0);
                     if (chanceDeFugir <= 10) {
@@ -155,9 +157,10 @@ async function pegaPokemon(msg, chat, comando) {
                 }
 
                 salvaPokemonCapturado(idUsuario, chat.id._serialized, ultimoPokemonSpawnado);
-                await chat.sendMessage(`Parabéns, @${contato.number}! Você capturou ${ultimoPokemonSpawnado}!`, { mentions: [contato] });
+                await chat.sendMessage(`*${ultimoPokemonSpawnado}* foi capturado por ${contato.number} na ${tentativa}ª tentativa!`, { mentions: [contato] });
                 msg.react('🎉');
                 capturaAbilitada = false;
+                tentativa = 1
 
                 cooldowns[idUsuario] = agora;
 
