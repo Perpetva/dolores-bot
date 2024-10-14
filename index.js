@@ -51,11 +51,11 @@ Conexão com o MongoDB
      });
 */
 
-process.on('unhandledRejection', (error) => {
-    if (error.message && error.message.includes("Reaction send error")) {
-        console.error("Erro de reação tratado:", error.message);
+process.on('unhandledRejection', (erro) => {
+    if (erro.message.includes("Erro de reação")) {
+        console.log("Erro de reação tratado:", erro.message);
     } else {
-        console.error("Erro não tratado:", error);
+        throw erro;
     }
 });
 

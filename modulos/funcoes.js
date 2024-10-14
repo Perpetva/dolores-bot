@@ -42,9 +42,9 @@ async function chamaTodos (msg, chat) {
 
 async function enviaChance (msg) {
     const mensagemRecebida = await msg.body.toLowerCase();
-    const mensagemInteira = await mensagemRecebida.split('!')[1]
+    const mensagemInteira = await mensagemRecebida.split('!')[1];
 
-    const iChance = msg.body.split(' ')[0].toLowerCase();
+    const iChance = await msg.body.split(' ')[0].toLowerCase();
     if (iChance != '!chance'){
         msg.reply('Você quis dizer !chance?');
         return;
@@ -69,8 +69,8 @@ async function enviaChance (msg) {
         } else {
             return '😵'
         }
-    } 
-    
+    }
+
     try {
         msg.reply(mandaChance);
     } catch (erro) {
