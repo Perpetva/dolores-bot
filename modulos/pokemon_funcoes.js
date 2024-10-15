@@ -10,6 +10,7 @@ let capturaAbilitada = false;
 let ultimoPokemonSpawnado = '';
 let grupoSelecionado = '';
 const cooldowns = {};
+let tentativa = 1;
 
 async function chamaPokemon(msg, client) {
     const ipoke = msg.body.split(' ')[0];
@@ -133,7 +134,6 @@ async function pegaPokemon(msg, chat, comando) {
 
         const pokemonACapturar = comandoInteiro.slice(1).join(' ');
         const chanceDeCapturar = numeroAleatorio(100, 0);
-        let tentativa = 1;
 
         if (pokemonACapturar.toLowerCase() === ultimoPokemonSpawnado.toLowerCase()) {
             const jaCapturado = await checaSePokemonCapturado(idUsuario, chat.id._serialized, ultimoPokemonSpawnado);
