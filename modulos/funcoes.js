@@ -13,31 +13,36 @@ function numeroAleatorio(min, max) {
 */
 
 async function chamaTodos(msg, chat) {
-    if (chat.isGroup) {
-        let text = '';
-        let mentions = [];
-        const contato = await msg.getContact();
+    try {
+        if (chat.isGroup) {
+            let text = '';
+            let mentions = [];
+            const contato = await msg.getContact();
 
-        for (let participant of chat.participants) {
-            let participante = participant.id.user;
+            for (let participant of chat.participants) {
+                let participante = participant.id.user;
 
-            if (participant.isAdmin && participante == contato.number) {
-                for (let participant of chat.participants) {
-                    mentions.push(`${participant.id.user}@c.us`);
-                    text += `@${participant.id.user}\n`;
+                if (participant.isAdmin && participante == contato.number) {
+                    for (let participant of chat.participants) {
+                        mentions.push(`${participant.id.user}@c.us`);
+                        text += `@${participant.id.user}\n`;
+                    }
+
+                    await chat.sendMessage('*--Marcando todos--*\n' + text, { mentions });
                 }
-
-                await chat.sendMessage('*--Marcando todos--*\n' + text, { mentions });
             }
-        }
 
-        if (text == '') {
-            msg.reply('Somente adms podem marcar todos em um grupo.')
-        }
+            if (text == '') {
+                msg.reply('Somente adms podem marcar todos em um grupo.')
+            }
 
-    } else {
-        msg.reply("Esse comando só funciona em grupos.");
+        } else {
+            msg.reply("Esse comando só funciona em grupos.");
+        }
+    } catch (erro) {
+        msg.reply('Não foi possível marcar togos');
     }
+
 }
 
 async function enviaChance(msg) {
@@ -59,7 +64,7 @@ async function enviaChance(msg) {
         const chance = await numeroAleatorio(100, 0);
         const mandaChance = `A ${mensagemInteira}\n\né de... ${chance}% ${emogiChance(chance)}`;
         msg.reply(mandaChance);
-        
+
     } catch (erro) {
         msg.reply('Não foi possível mandar a chance ;(');
         console.log('Erro na !chance', erro)

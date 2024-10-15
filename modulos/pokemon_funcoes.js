@@ -133,11 +133,11 @@ async function pegaPokemon(msg, chat, comando) {
 
         const pokemonACapturar = comandoInteiro.slice(1).join(' ');
         const chanceDeCapturar = numeroAleatorio(100, 0);
+        let tentativa = 1;
 
         if (pokemonACapturar.toLowerCase() === ultimoPokemonSpawnado.toLowerCase()) {
             const jaCapturado = await checaSePokemonCapturado(idUsuario, chat.id._serialized, ultimoPokemonSpawnado);
-            let tentativa = 1;
-
+            
             if (!jaCapturado) {
                 if (chanceDeCapturar <= 50) {
                     msg.reply(`◓ _*${ultimoPokemonSpawnado}* escapou da pokébola_ ◓`);
