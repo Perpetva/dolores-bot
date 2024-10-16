@@ -21,7 +21,8 @@ const { mandaCovid } = require('./modulos/covid.js');
 const { mandaFraseAnime, mandaFatoAnime } = require('./modulos/anime.js');
 const { chamaPin } = require('./modulos/pinterest.js');
 const { traduz, traduzir } = require('./modulos/traducao.js');
-const { mandaConselho } = require('./modulos/conselho.js')
+const { mandaConselho } = require('./modulos/conselho.js');
+const { euNunca } = require('./modulos/enquete.js');
 // const { mandaBoaNoite, mandaBoatarde, mandaBomDia } = require('./modulos/saudacoes.js');
 const { chamaPokemon, enviaPokedex, spawnaPokemon, pegaPokemon, checaSeAbilitado, getRank, pokemonFugiu, getInsignia } = require('./modulos/pokemon_funcoes.js');
 
@@ -136,6 +137,10 @@ client.on('message', async msg => {
 
     else if (comando === '!cotacao') {
         cotacao(msg);
+    }
+
+    else if (comando === '!eununca') {
+        euNunca(msg, client);
     }
 
     else if (comando.startsWith('!poke') && comando != '!pokedex') {

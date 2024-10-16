@@ -62,6 +62,9 @@ function chamaMenu (msg, client) {
     '*!traduz (texto)*\n'+
     '_-> Traduz o texto enviado._\n\n'+
 
+    '*!eununca (texto)*\n'+
+    '_-> Brincadeira do eu nunca._\n\n'+
+
     '*!traduzir*\n'+
     '_-> Traduz a imagem marcada._\n\n'+
 

@@ -107,6 +107,7 @@ async function spawnaPokemon(client, chat) {
 
 function pokemonFugiu(client) {
     capturaAbilitada = false;
+    tentativa = 1
     const mensagem = `💨 O pokémon ${ultimoPokemonSpawnado} fugiu 💨`
 
     client.sendMessage(grupoSelecionado, mensagem);
@@ -146,6 +147,7 @@ async function pegaPokemon(msg, chat, comando) {
                     const chanceDeFugir = numeroAleatorio(100, 0);
                     if (chanceDeFugir <= 10) {
                         capturaAbilitada = false;
+                        tentativa = 1
                         const mensagem = `_💨 *${ultimoPokemonSpawnado}* fugiu 💨_`;
                         setTimeout(async () => {
                             await chat.sendMessage(mensagem);
