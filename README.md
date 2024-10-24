@@ -92,12 +92,6 @@ Instale as dependências
   npm install
 ```
 
-Inicie o servidor
-
-```bash
-  npm run start
-```
-
 Após isso crie as variaveis listadas acima no seu .env. Para usar a RapidApi você precisa estar inscrito nas APIs abaixo:
 
 `Recipe-Book` -> [Link](https://rapidapi.com/technicalsolverm/api/recipe-book2)
