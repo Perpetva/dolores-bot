@@ -36,19 +36,19 @@ async function receitaAleatoria(msg, client) {
     client.sendMessage(msg.from, '_...Aguarde..._');
 
     try {
-        const options1 = await pegaLinkReceita();
-        const response1 = await axios.request(options1);
-        const urlReceita = response1.data[numeroSorteado].path;
+        const linkReceita = await pegaLinkReceita();
+        const responseLinkReceita = await axios.request(linkReceita);
+        const urlReceita = responseLinkReceita.data[numeroSorteado].path;
 
-        const options2 = await informacoesReceita(urlReceita);
-        const response2 = await axios.request(options2);
+        const infoReceita = await informacoesReceita(urlReceita);
+        const responseInfoReceita = await axios.request(infoReceita);
 
-        const urlImagem = response2.data['Imagen de la receta'];
-        const tituloDaReceita = response2.data['Titulo de la preparacion'];
-        const porcao = response2.data.Raciones;
-        const duracao = response2.data.Duracion;
-        const ingredientes = response2.data.Ingredientes.join('\n- ');
-        const modoDePreparo = response2.data['Pasos de preparacion'].map((modo, i) => `${i} - ${modo}`).join('\n\n');
+        const urlImagem = responseInfoReceita.data['Imagen de la receta'];
+        const tituloDaReceita = responseInfoReceita.data['Titulo de la preparacion'];
+        const porcao = responseInfoReceita.data.Raciones;
+        const duracao = responseInfoReceita.data.Duracion;
+        const ingredientes = responseInfoReceita.data.Ingredientes.join('\n- ');
+        const modoDePreparo = responseInfoReceita.data['Pasos de preparacion'].map((modo, i) => `${i} - ${modo}`).join('\n\n');
 
         const imagem = await MessageMedia.fromUrl(urlImagem);
         const mensagem = `*${tituloDaReceita}*\n\nDuração: ${duracao}\n_${porcao}_\n\n*Ingredientes* 👇\n- ${ingredientes}\n\n*Modo de preparo* 👇\n${modoDePreparo}`;

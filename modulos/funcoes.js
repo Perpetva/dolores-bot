@@ -5,13 +5,6 @@ function numeroAleatorio(quantidade, numero) {
     return Math.floor(Math.random() * quantidade) + numero;
 }
 
-/*
-function numeroAleatorio(min, max) {
-    const numero = Math.random() * (max - min) + min;
-    return Math.floor(numero);
-}
-*/
-
 async function chamaTodos(msg, chat) {
     try {
         if (chat.isGroup) {

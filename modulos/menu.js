@@ -56,13 +56,13 @@ function chamaMenu (msg, client) {
     '*!cotacao*\n'+
     '_-> Cotação de algumas moedas._\n\n'+
 
-    '*!pin (palavra)*\n'+
+    '*!pin (palavra ou texto)*\n'+
     '_-> Manda uma imagem do pinterest._\n\n'+
 
     '*!traduz (texto)*\n'+
     '_-> Traduz o texto enviado._\n\n'+
 
-    '*!eununca (texto)*\n'+
+    '*!eununca*\n'+
     '_-> Brincadeira do eu nunca._\n\n'+
 
     '*!traduzir*\n'+
@@ -78,7 +78,7 @@ function chamaMenu (msg, client) {
     '_-> Receita alearória._\n\n'+
 
     '*!rank*\n'+
-    '_-> Top 3 com mais pokemons._\n\n'+
+    '_-> Top 3 com mais pokemons do grupo._\n\n'+
 
     '--------------------\n\n'+
 

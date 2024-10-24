@@ -67,8 +67,8 @@ async function enviaPokedex(msg, chat) {
     try {
         const contato = await msg.getContact();
 
-        const idUsuario = (contato).id._serialized;
-        const idGrupo = (chat).id._serialized;
+        const idUsuario = await (contato).id._serialized;
+        const idGrupo = await (chat).id._serialized;
         const usuarioPokedex = await getPokedex(idUsuario, idGrupo);
 
         if (usuarioPokedex.length > 0) {
@@ -77,7 +77,7 @@ async function enviaPokedex(msg, chat) {
             await chat.sendMessage('Sua Pokedex está vazia. Capture mais Pokémon!');
         }
     } catch (erro) {
-        console.log('Não consegui mandar a pokedex.');
+        console.log('Não consegui mandar a pokedex.', erro);
     }
 }
 
@@ -138,7 +138,7 @@ async function pegaPokemon(msg, chat, comando) {
 
         if (pokemonACapturar.toLowerCase() === ultimoPokemonSpawnado.toLowerCase()) {
             const jaCapturado = await checaSePokemonCapturado(idUsuario, chat.id._serialized, ultimoPokemonSpawnado);
-            
+
             if (!jaCapturado) {
                 if (chanceDeCapturar <= 50) {
                     msg.reply(`◓ _*${ultimoPokemonSpawnado}* escapou da pokébola_ ◓`);
@@ -375,13 +375,11 @@ async function getInsignia(msg, chat, client) {
 
         for (const pokemon of usuarioPokedex) {
             const tipos = await getTiposPokemon(pokemon);
-
-            ///////
+            
             if (!tipos || tipos.length === 0) {
                 console.log(`Tipos não encontrados para Pokémon: ${pokemon}`);
-                continue; // Pula para o próximo Pokémon
-            }      
-            ///////  
+                continue; 
+            }
 
             for (const tipo of tipos) {
                 if (tiposContagem[tipo]) {
@@ -425,11 +423,9 @@ async function getTiposPokemon(pokemon) {
     try {
         const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`);
 
-        /////////////
         if (!response.ok) {
             throw new Error(`Erro ao buscar Pokémon: ${response.statusText}`);
         }
-        ////////////////
 
         const data = await response.json();
         return data.types.map(tipoInfo => tipoInfo.type.name);
